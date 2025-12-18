@@ -1,0 +1,386 @@
+﻿{
+  "items": [
+    {
+      "id": "curry-puff",
+      "title": "Curry Puff (2 pcs)",
+      "category": "Starters",
+      "price": 5.5,
+      "description": "Deep-fried Malaysian curry puffs filled with smashed curry potato, onions & aromatic spices.",
+      "image": "/images/items/curry-puff.jpg"
+    },
+    {
+      "id": "veg-spring-roll",
+      "title": "Vegetable Spring Roll (4 pcs)",
+      "category": "Starters",
+      "price": 6.9,
+      "description": "Crispy fried spring rolls filled with mixed vegetables, served with sweet chilli dipping sauce.",
+      "image": "/images/items/veg-spring-roll.jpg"
+    },
+    {
+      "id": "cucuk-udang",
+      "title": "Cucuk Udang (2 pcs)",
+      "category": "Starters",
+      "price": 7.9,
+      "description": "Crispy prawn fritters served with peanut sauce.",
+      "image": "/images/items/cucuk-udang.jpg"
+    },
+    {
+      "id": "roti-canai",
+      "title": "Roti Canai with Curry & Dhal (2 pcs)",
+      "category": "Starters",
+      "price": 10.5,
+      "description": "Flaky Malaysian flatbread served with curry and dhal.",
+      "image": "/images/items/roti-canai.jpg"
+    },
+
+    {
+      "id": "nasi-goreng-cina",
+      "title": "Nasi Goreng Cina",
+      "category": "Rice Meals",
+      "price": 16.5,
+      "description": "Fried rice with your choice of protein and vegetables.",
+      "image": "/images/items/nasi-goreng-cina.jpg",
+      "variants": [
+        { "id": "nasi-goreng-cina-chicken", "title": "Chicken", "price": 16.5 },
+        { "id": "nasi-goreng-cina-prawn", "title": "Prawn", "price": 18.5 },
+        { "id": "nasi-goreng-cina-combo", "title": "Combo (Chicken + Prawn)", "price": 20.5 }
+      ], "options": {
+  "egg": true
+}
+
+    },
+    {
+      "id": "nasi-goreng-kampung",
+      "title": "Nasi Goreng Kampung (Spicy)",
+      "category": "Rice Meals",
+      "price": 17.5,
+      "description": "Spicy kampung-style fried rice topped with crispy anchovies.",
+      "image": "/images/items/nasi-goreng-kampung.jpg",
+      "options": {
+  "spice": true
+}
+
+    },
+    {
+      "id": "nasi-lemak-biasa",
+      "title": "Nasi Lemak Biasa",
+      "category": "Nasi Lemak",
+      "price": 13.5,
+      "description": "Coconut rice with sambal, anchovies, peanuts and cucumber.",
+      "image": "/images/items/nasi-lemak-biasa.jpg",
+      "options": {
+  "egg": true
+}
+
+    }, 
+    {
+      "id": "chicken-curry-rice",
+      "title": "Chicken Curry with Rice",
+      "category": "Rice Meals",
+      "price": 16.5,
+      "description": "Aromatic Malaysian chicken curry slow cooked with your choice of rice",
+      "image": "/images/items/chicken-curry-jasmine.jpg",
+       "options": {
+    "rice": true
+  }
+    },
+    {
+      "id": "beef-rendang-rice",
+      "title": "Beef Rendang with Rice",
+      "category": "Rice Meals",
+      "price": 18.5,
+      "description": "Malay Classic featuring slow braised beef with your choice of rice",
+      "image": "/images/items/beef-rendang-jasmine.jpg",
+       "options": {
+    "rice": true
+  }
+    },
+    {
+      "id": "nasi-lemak-ayam",
+      "title": "Nasi Lemak Ayam Goreng Berempah",
+      "category": "Nasi Lemak",
+      "price": 18.5,
+      "description": "Coconut rice with spiced fried chicken, sambal and sides.",
+      "image": "/images/items/nasi-lemak-ayam.jpg",
+      "options": {
+  "egg": true
+}
+
+    },
+    {
+      "id": "nasi-lemak-rendang",
+      "title": "Nasi Lemak Beef Rendang",
+      "category": "Nasi Lemak",
+      "price": 20.5,
+      "description": "Coconut rice served with slow-cooked beef rendang.",
+      "image": "/images/items/beef-rendang-jasmine.jpg",
+      "options": {
+  "egg": true
+}
+
+    },
+
+    {
+      "id": "banana-leaf-set-veg",
+      "title": "Banana Leaf Set",
+      "category": "Banana Leaf Weekend Lunch Special",
+      "price": 21.9,
+      "description": "A traditional South Indian banana leaf meal featuring three freshly prepared vegetable dishes, served with sambar, rasam, papadam & Kesari.",
+      "image": "/images/items/banana-leaf-set-veg.jpg"
+    },
+
+    {
+      "id": "curry-laksa",
+      "title": "Curry Laksa",
+      "category": "Noodles",
+      "price": 16.5,
+      "description": "Aromatic coconut curry noodle soup with your choice of protein.",
+      "image": "/images/items/curry-laksa.jpg",
+      "variants": [
+        { "id": "curry-laksa-chicken", "title": "Chicken", "price": 16.5 },
+        { "id": "curry-laksa-prawn", "title": "Prawn", "price": 18.5 },
+        { "id": "curry-laksa-combo", "title": "Combo", "price": 20.5 }
+      ], "options": {
+  "egg": true
+}
+
+    },
+    {
+  "id": "mee-goreng",
+  "title": "Mee Goreng",
+  "category": "Noodles",
+  "price": 16.5,
+  "description": "Stir-fried noodles with vegetables and your choice of protein.",
+  "image": "/images/items/mee-goreng.jpg",
+  "variants": [
+    { "id": "mee-goreng-chicken", "title": "Chicken", "price": 16.5 },
+    { "id": "mee-goreng-prawn", "title": "Prawn", "price": 18.5 },
+    { "id": "mee-goreng-combo", "title": "Combo", "price": 20.5 }
+  ],
+  "options": {
+    "egg": [
+      { "id": "egg-yes", "title": "With Fried Egg", "price": 2.0 },
+      { "id": "egg-no", "title": "No Fried Egg", "price": 0 }
+    ],
+    "spice": ["Less", "Mild", "Spicy", "Extra Spicy"]
+  }
+}
+
+,
+     {
+  "id": "maggi-goreng",
+  "title": "Maggi Goreng",
+  "category": "Noodles",
+  "price": 16.5,
+  "description": "Wok-tossed noodles with savoury sauce, veggies and chicken.",
+  "image": "/images/items/maggi-goreng.jpg",
+  "options": {
+    "egg": [
+      { "id": "egg-yes", "title": "With Fried Egg", "price": 2.0 },
+      { "id": "egg-no", "title": "No Fried Egg", "price": 0 }
+    ],
+    "spice": ["Less", "Mild", "Spicy", "Extra Spicy"]
+  }
+}
+,
+
+   {
+  "id": "kway-teow-goreng",
+  "title": "Kway Teow Goreng",
+  "category": "Noodles",
+  "price": 16.5,
+  "description": "Wok-fried flat rice noodles with your choice of protein.",
+  "image": "/images/items/kway-teow-goreng.jpg",
+  "variants": [
+    { "id": "kway-teow-chicken", "title": "Chicken", "price": 16.5 },
+    { "id": "kway-teow-prawn", "title": "Prawn", "price": 18.5 },
+    { "id": "kway-teow-combo", "title": "Combo", "price": 20.5 }
+  ],
+  "options": {
+    "egg": [
+      { "id": "egg-yes", "title": "With Fried Egg", "price": 2.0 },
+      { "id": "egg-no", "title": "No Fried Egg", "price": 0 }
+    ],
+    "spice": ["Less", "Mild", "Spicy", "Extra Spicy"]
+  }
+}
+
+,
+
+    
+  
+
+    {
+      "id": "kids-mee-goreng",
+      "title": "Kids Mee Goreng",
+      "category": "Kids",
+      "price": 11.5,
+      "description": "Smaller portion of mee goreng — kid friendly.",
+      "image": "/images/items/mee-goreng.jpg",
+      "options": {
+    "egg": true,
+    "spice": true
+  }
+
+    },
+    {
+      "id": "kids-fried-rice",
+      "title": "Kids Fried Rice",
+      "category": "Kids",
+      "price": 11.5,
+      "description": "Jasmine rice with egg and mixed vegetables.",
+      "image": "/images/items/nasi-goreng-cina.jpg",
+       "options": {
+    "egg": true
+  }
+    },
+    {
+      "id": "kids-nuggets",
+      "title": "Chicken Nuggets with Fries",
+      "category": "Kids",
+      "price": 7.9,
+      "description": "Crispy nuggets served with fries — kids favourite.",
+      "image": "/images/items/chicken-nuggets-fries.jpg"
+    },
+{
+      "id": "addon-fried-egg",
+      "title": "Fried Egg",
+      "category": "Add-ons",
+      "price": 2.50,
+      "description": "Crispy edge,soft centre - perfect on any rice or noodle dish.",
+      "image": "/images/items/fried-egg.jpg"
+    },
+    {
+      "id": "addon-ayam-goreng-berempah-maryland",
+      "title": "Ayam Goreng Berempah-Maryland piece",
+      "category": "Add-ons",
+      "price": 8.90,
+      "description": "Malaysian spiced fried chicken",
+      "image": "/images/items/ayam-addon.jpg"
+    },
+    {
+      "id": "addon-beef-rendang",
+      "title": "Beef Rendang",
+      "category": "Add-ons",
+      "price": 10.90,
+      "description": "Slow-cooked beef in rich rendang spices.",
+      "image": "/images/items/beef-rendang.jpg"
+    },
+    {
+      "id": "addon-coconut-rice",
+      "title": "Coconut Rice",
+      "category": "Add-ons",
+      "price": 4.5,
+      "description": "Fragrant coconut milk rice with pandan notes.",
+      "image": "/images/items/coconut-rice.jpg"
+    },
+    {
+      "id": "addon-jasmine-rice",
+      "title": "Jasmine Rice",
+      "category": "Add-ons",
+      "price": 3.5,
+      "description": "Light, fragrant steamed jasmine rice.",
+      "image": "/images/items/jasmine-rice.jpg"
+    },
+    {
+      "id": "addon-sambal",
+      "title": "Sambal Sauce",
+      "category": "Add-ons",
+      "price": 3.0,
+      "description": "Spicy, tangy homemade sambal — rich chilli flavour.",
+      "image": "/images/items/sambal-sauce.jpg"
+    },
+
+    {
+      "id": "drink-teh-tarik-hot",
+      "title": "Teh Tarik (Hot)",
+      "category": "Signature Malaysian Drinks",
+      "price": 4.5,
+      "description": "Malaysia’s iconic pulled milk tea — smooth, creamy and frothy.",
+      "image": "/images/items/teh-tarik-hot.jpg"
+    },
+    {
+      "id": "drink-teh-tarik-cold",
+      "title": "Teh Tarik (Cold)",
+      "category": "Signature Malaysian Drinks",
+      "price": 5.0,
+      "description": "Chilled version of the famous pulled tea — refreshing and creamy.",
+      "image": "/images/items/teh-tarik.jpg"
+    },
+    {
+      "id": "drink-sirap-ais",
+      "title": "Sirap Ais",
+      "category": "Signature Malaysian Drinks",
+      "price": 5.5,
+      "description": "Vibrant pink, rose falvoured drink served with ice.",
+      "image": "/images/items/sirap-ais.jpg"
+    },
+    {
+      "id": "drink-bandung-ais",
+      "title": "Bandung Ais",
+      "category": "Signature Malaysian Drinks",
+      "price": 6.5,
+      "description": "A beautiful pink drink made from rose syrup and creamy milk served over milk.",
+      "image": "/images/items/bandung-ais.jpg"
+    },
+    {
+      "id": "drink-milo-ais",
+      "title": "Milo Ais",
+      "category": "Signature Malaysian Drinks",
+      "price": 6.5,
+      "description": "A refreshing Malaysian chocolate malt drink, served cold.",
+      "image": "/images/items/milo-ais.jpg"
+    },
+    {
+      "id": "soft-coke",
+      "title": "Coke Regular",
+      "category": "Soft Drinks",
+      "price": 4.0,
+      "image": "/images/items/coke-reg.jpg"
+    },
+    {
+      "id": "soft-coke-zero",
+      "title": "Coke No Sugar",
+      "category": "Soft Drinks",
+      "price": 4.0,
+      "image": "/images/items/coke-nosugar.jpg"
+    },
+    {
+      "id": "soft-sprite",
+      "title": "Sprite",
+      "category": "Soft Drinks",
+      "price": 4.0,
+      "image": "/images/items/sprite.jpg"
+    },{
+      "id": "soft-fanta",
+      "title": "Fanta",
+      "category": "Soft Drinks",
+      "price": 4.0,
+      "image": "/images/items/fanta.jpg"
+    },
+    {
+      "id": "soft-soya",
+      "title": "Soya Bean",
+      "category": "Soft Drinks",
+      "price": 4.5,
+      "description": "Creamy soya bean drink.",
+      "image": "/images/items/soya-bean.jpg"
+    },
+    
+
+    {
+      "id": "dessert-ice-kacang",
+      "title": "Ice Kacang",
+      "category": "Dessert",
+      "price": 10.9,
+      "image": "/images/items/ice-kacang.jpg"
+    },
+    {
+      "id": "dessert-buko-pandan",
+      "title": "Buko Pandan",
+      "category": "Dessert",
+      "price": 10.9,
+      "image": "/images/items/buko-pandan.jpg"
+    }
+  ]
+}

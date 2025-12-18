@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "id": "curry-puff",
+      "title": "Curry Puff (2 pcs)",
+      "category": "Starters",
+      "price": 5.0,
+      "description": "Deep-fried Malaysian curry puffs filled with smashed curry potato, onions & aromatic spices."
+    },
+    {
+      "id": "veg-spring-roll",
+      "title": "Vegetable Spring Roll (4 pcs)",
+      "category": "Starters",
+      "price": 6.9,
+      "description": "Crispy fried spring rolls filled with mixed vegetables, served with sweet chilli sauce."
+    },
+    {
+      "id": "nasi-lemak-biasa",
+      "title": "Nasi Lemak Biasa",
+      "category": "Rice Meals",
+      "price": 10.5,
+      "description": "Coconut rice with sambal, anchovies, peanuts and cucumber."
+    },
+    {
+      "id": "beef-rendang",
+      "title": "Beef Rendang",
+      "category": "Mains",
+      "price": 18.5,
+      "description": "Slow-cooked beef rendang in rich spices."
+    },
+    {
+      "id": "coconut-rice",
+      "title": "Coconut Rice",
+      "category": "Addons",
+      "price": 4.5,
+      "description": "Fragrant coconut rice (addon)."
+    },
+    {
+      "id": "jasmine-rice",
+      "title": "Jasmine Rice",
+      "category": "Addons",
+      "price": 3.5,
+      "description": "Steamed jasmine rice (addon)."
+    }
+  ]
+}
