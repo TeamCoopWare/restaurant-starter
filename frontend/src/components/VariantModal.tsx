@@ -146,11 +146,7 @@ export default function VariantModal({
                   title: item.title,
                   price: basePrice + eggPrice,
                   qty: 1,
-                  meta: {
-                    egg: hasEgg ? eggOption : undefined,
-                    spice: hasSpice ? spiceLevel : undefined,
-                    rice: hasRice ? riceType : undefined,
-                  },
+                 
                 });
 
                 onClose();

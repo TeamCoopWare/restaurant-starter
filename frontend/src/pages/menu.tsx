@@ -46,8 +46,9 @@ export default function MenuPage() {
   const [bananaBase, setBananaBase] = useState<MenuItem | null>(null);
 
   /* SAFE MENU ITEMS */
-  const rawItems = Array.isArray(menuData.items) ? menuData.items : [];
-  const menuItems: MenuItem[] = rawItems;
+  const menuItems: MenuItem[] = Array.isArray(menuData.items)
+  ? (menuData.items as MenuItem[])
+  : [];
 
   /* GROUP BY CATEGORY */
   const categories = menuItems.reduce<Record<string, MenuItem[]>>((acc, it) => {
