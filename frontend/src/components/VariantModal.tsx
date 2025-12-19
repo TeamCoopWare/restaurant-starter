@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { VIEW_ONLY_MENU } from "../../config/appConfig";
 import { useCart } from "../lib/cartContext";
 
-const SPICE_LEVELS = ["Less", "Mild", "Spicy", "Extra Spicy"];
+const SPICE_LEVELS = ["Less", "Normal", "Spicy", "Extra Spicy"];
 const RICE_OPTIONS = ["Jasmine Rice", "Coconut Rice"];
 
 export default function VariantModal({

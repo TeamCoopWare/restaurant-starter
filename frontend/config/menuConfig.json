@@ -217,6 +217,12 @@
       "price": 11.5,
       "description": "Smaller portion of mee goreng — kid friendly.",
       "image": "/images/items/mee-goreng.jpg",
+      "variants": [
+        { "id": "kids-mee-goreng", "title": "None", "price": 11.5 },
+    { "id": "kids-mee-goreng", "title": "Chicken", "price": 12.5 },
+    { "id": "kids-mee-goreng", "title": "Prawn", "price": 13.5 },
+    { "id": "kids-mee-goreng", "title": "Combo", "price": 14.5 }
+  ],
   
       "options": {
     "egg": true,
@@ -232,6 +238,7 @@
       "description": "Jasmine rice with egg and mixed vegetables.",
       "image": "/images/items/nasi-goreng-cina.jpg",
        "variants": [
+        { "id": "kids-fried-rice", "title": "None", "price": 11.5 },
     { "id": "kids-fried-rice", "title": "Chicken", "price": 12.5 },
     { "id": "kids-fried-rice", "title": "Prawn", "price": 13.5 },
     { "id": "kids-fried-rice", "title": "Combo", "price": 14.5 }
