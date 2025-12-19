@@ -4,7 +4,7 @@
       "id": "curry-puff",
       "title": "Curry Puff (2 pcs)",
       "category": "Starters",
-      "price": 5.5,
+      "price": 5.0,
       "description": "Deep-fried Malaysian curry puffs filled with smashed curry potato, onions & aromatic spices.",
       "image": "/images/items/curry-puff.jpg"
     },
@@ -43,7 +43,7 @@
       "variants": [
         { "id": "nasi-goreng-cina-chicken", "title": "Chicken", "price": 16.5 },
         { "id": "nasi-goreng-cina-prawn", "title": "Prawn", "price": 18.5 },
-        { "id": "nasi-goreng-cina-combo", "title": "Combo (Chicken + Prawn)", "price": 20.5 }
+        { "id": "nasi-goreng-cina-combo", "title": "Combo (Chicken + Prawn)", "price": 19.5 }
       ], "options": {
   "egg": true
 }
@@ -65,7 +65,7 @@
       "id": "nasi-lemak-biasa",
       "title": "Nasi Lemak Biasa",
       "category": "Nasi Lemak",
-      "price": 13.5,
+      "price": 10.5,
       "description": "Coconut rice with sambal, anchovies, peanuts and cucumber.",
       "image": "/images/items/nasi-lemak-biasa.jpg",
       "options": {
@@ -139,7 +139,7 @@
       "variants": [
         { "id": "curry-laksa-chicken", "title": "Chicken", "price": 16.5 },
         { "id": "curry-laksa-prawn", "title": "Prawn", "price": 18.5 },
-        { "id": "curry-laksa-combo", "title": "Combo", "price": 20.5 }
+        { "id": "curry-laksa-combo", "title": "Combo", "price": 19.5 }
       ], "options": {
   "egg": true
 }
@@ -155,7 +155,7 @@
   "variants": [
     { "id": "mee-goreng-chicken", "title": "Chicken", "price": 16.5 },
     { "id": "mee-goreng-prawn", "title": "Prawn", "price": 18.5 },
-    { "id": "mee-goreng-combo", "title": "Combo", "price": 20.5 }
+    { "id": "mee-goreng-combo", "title": "Combo", "price": 19.5 }
   ],
   "options": {
     "egg": [
@@ -194,7 +194,7 @@
   "variants": [
     { "id": "kway-teow-chicken", "title": "Chicken", "price": 16.5 },
     { "id": "kway-teow-prawn", "title": "Prawn", "price": 18.5 },
-    { "id": "kway-teow-combo", "title": "Combo", "price": 20.5 }
+    { "id": "kway-teow-combo", "title": "Combo", "price": 19.5 }
   ],
   "options": {
     "egg": [
@@ -217,6 +217,7 @@
       "price": 11.5,
       "description": "Smaller portion of mee goreng — kid friendly.",
       "image": "/images/items/mee-goreng.jpg",
+  
       "options": {
     "egg": true,
     "spice": true
@@ -230,6 +231,11 @@
       "price": 11.5,
       "description": "Jasmine rice with egg and mixed vegetables.",
       "image": "/images/items/nasi-goreng-cina.jpg",
+       "variants": [
+    { "id": "kids-fried-rice", "title": "Chicken", "price": 11.5 },
+    { "id": "kids-fried-rice", "title": "Prawn", "price": 13.5 },
+    { "id": "kids-fried-rice", "title": "Combo", "price": 14.5 }
+  ],
        "options": {
     "egg": true
   }
@@ -246,7 +252,7 @@
       "id": "addon-fried-egg",
       "title": "Fried Egg",
       "category": "Add-ons",
-      "price": 2.50,
+      "price": 2.0,
       "description": "Crispy edge,soft centre - perfect on any rice or noodle dish.",
       "image": "/images/items/fried-egg.jpg"
     },
