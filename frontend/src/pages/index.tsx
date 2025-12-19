@@ -19,28 +19,55 @@ export default function HomePage() {
 
             <div className="hero-buttons">
               <Link href="/menu" className="btn btn-primary">View Menu →</Link>
+              
+              
+<div className="hero-icon-group">
+  {/* CALL ICON */}
+  <a
+    href="tel:+61460316046"
+    className="hero-icon call"
+    aria-label="Call Sedap Eatery"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="white"
+      stroke="white"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.09 4.18 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.72c.12.97.37 1.92.73 2.82a2 2 0 0 1-.45 2.11L8.91 10.91a16 16 0 0 0 6 6l1.28-1.28a2 2 0 0 1 2.11-.45c.9.36 1.85.61 2.82.73A2 2 0 0 1 22 16.92z" />
+    </svg>
+  </a>
 
-              {/* phone button with icon */}
-              <a className="btn btn-call" href="tel:+61882934249" aria-label="Call Sedap Eatery">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  style={{ marginRight: 8 }}
-                  aria-hidden
-                >
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.09 4.18 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.72c.12.97.37 1.92.73 2.82a2 2 0 0 1-.45 2.11L8.91 10.91a16 16 0 0 0 6 6l1.28-1.28a2 2 0 0 1 2.11-.45c.9.36 1.85.61 2.82.73A2 2 0 0 1 22 16.92z" />
-                </svg>
-                +61 882 934 249
-              </a>
-            </div>
-          </div>
+  {/* SOCIAL ICONS */}
+  <a
+    href="https://www.instagram.com/sedapeatery_adelaide"
+    target="_blank"
+    rel="noreferrer"
+    className="hero-icon"
+    aria-label="Instagram"
+  >
+    <img src="/images/insta.jpg" alt="Instagram" />
+  </a>
+
+  <a
+    href="https://www.facebook.com/share/164c1Jw9Nu/"
+    target="_blank"
+    rel="noreferrer"
+    className="hero-icon"
+    aria-label="Facebook"
+  >
+    <img src="/images/fb.jpg" alt="Facebook" />
+  </a>
+</div>
+
+            
+     </div>    
+         
+</div>
+
 
           <div className="hero-right" aria-hidden>
             <img src="/images/logo-hero.png" alt="Sedap Eatery Logo" className="hero-logo" />
@@ -76,7 +103,7 @@ export default function HomePage() {
         </div>
       </section>
 <a
-  href="https://wa.me/61882934249"
+  href="https://wa.me/61460316046"
   target="_blank"
   rel="noreferrer"
   className="whatsapp-float"
@@ -91,8 +118,19 @@ export default function HomePage() {
 
       <footer className="footer">
         <div className="footer-inner site-container">
-          <div className="footer-brand">Sedap Eatery</div>
-          <div className="footer-info">Shop #4, 10–26 Vale Ave, Valley View, SA • Open daily</div>
+          <div className="footer-brand">Sedap Eatery</div>Shop #4, 10–26 Vale Ave, Valley View, SA
+          <div className="footer-info">
+  Powered by{" "}
+  <a
+    href="https://dispatch.genzonix.com/"
+    target="_blank"
+    rel="noreferrer"
+    className="footer-link"
+  >
+    TeamCoopTech
+  </a>
+</div>
+
         </div>
       </footer>
     </div>

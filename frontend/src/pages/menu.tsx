@@ -217,7 +217,7 @@ export default function MenuPage() {
 
       {/* WHATSAPP */}
       <a
-        href="https://wa.me/61882934249"
+        href="https://wa.me/61460316046"
         target="_blank"
         rel="noreferrer"
         className="whatsapp-float"
@@ -232,9 +232,18 @@ export default function MenuPage() {
       {/* FOOTER */}
       <footer className="footer">
         <div className="footer-inner site-container">
-          <div className="footer-brand">Sedap Eatery</div>
+          <div className="footer-brand">Sedap Eatery</div>Shop #4, 10–26 Vale Ave, Valley View, SA
           <div className="footer-info">
-            Shop #4, 10–26 Vale Ave, Valley View, SA • Open daily
+  Powered by{" "}
+  <a
+    href="https://dispatch.genzonix.com/"
+    target="_blank"
+    rel="noreferrer"
+    className="footer-link"
+  >
+    TeamCoopTech
+  </a>
+
           </div>
         </div>
       </footer>

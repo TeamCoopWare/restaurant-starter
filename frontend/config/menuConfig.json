@@ -232,7 +232,7 @@
       "description": "Jasmine rice with egg and mixed vegetables.",
       "image": "/images/items/nasi-goreng-cina.jpg",
        "variants": [
-    { "id": "kids-fried-rice", "title": "Chicken", "price": 11.5 },
+    { "id": "kids-fried-rice", "title": "Chicken", "price": 12.5 },
     { "id": "kids-fried-rice", "title": "Prawn", "price": 13.5 },
     { "id": "kids-fried-rice", "title": "Combo", "price": 14.5 }
   ],

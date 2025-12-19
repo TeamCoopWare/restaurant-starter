@@ -334,25 +334,45 @@ html,body,#__next{
 }
 
 /* ---------- START OF EDIT: feature-card alignment fix ----------
-   Make icon and the text align nicely (icon vertically centered with the title).
-   - change align-items to center so icon & main text block align middle
-   - tune .feature-icon sizing and spacing
+  
 -----------------------------------------------------------------*/
-.feature-card{
-  background:linear-gradient(180deg,#3F6638,#2E4B2A);
-  color:#fff;
-  padding:22px;
-  border-radius:12px;
-  box-shadow:0 14px 40px rgba(0,0,0,0.28);
-  min-height:120px;
-  display:flex;
-  gap:12px;
-  align-items:center;    /* was flex-start — center vertically aligns icon with title */
+.feature-card {
+  background: linear-gradient(
+    180deg,
+    #3f6b3f 0%,
+    #2f542f 100%
+  );
+
+  border-radius: 14px;          /* slightly less “buttony” */
+  padding: 18px 20px;
+
+  box-shadow: none;             /* 🔑 removes button feel */
+  border: 1px solid rgba(255,255,255,0.08);
+
+  cursor: default;              /* 🔑 no hand cursor */
+  transition: none;             /* 🔑 no hover animation */
 }
+.feature-card{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+}
+.feature-title{
+  font-size:18px;
+  font-weight:600;
+  margin:0 0 6px 0;
+}
+
+.feature-desc{
+  font-size:15px;
+  line-height:1.55;
+  opacity:0.9;
+}
+
 
 /* icon inside card: nice size, left spacing */
 .feature-icon{
-  font-size:26px;       /* slightly bigger icon */
+  font-size:22px;       /* slightly bigger icon */
   line-height:1;
   display:flex;
   align-items:center;
@@ -649,11 +669,18 @@ html,body,#__next{
 }
 
 .whatsapp-icon{
-  width:56px;
-  height:56px;
+  width:46px;
+  height:46px;
   object-fit:contain;
   filter:drop-shadow(0 6px 18px rgba(0,0,0,0.45));
 }
+@media (max-width:768px){
+  .whatsapp-icon{
+    width:42px;
+    height:42px;
+  }
+}
+
 
 /* ---------- FOOTER (NEW RULES) ----------
    Ensure the address is one straight sentence on desktop, but allow wrapping on mobile.
@@ -1079,4 +1106,137 @@ html,body,#__next{
   color: var(--accent-yellow);
   padding: 10px;
   border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+
+  /* Reduce overall hero height */
+  .hero-batik-logo {
+    min-height: auto;        /* IMPORTANT */
+    padding-top: 20px;
+    padding-bottom: 30px;
+  }
+
+  /* Stack content tightly */
+  .hero-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;               /* KEY FIX */
+    padding: 0 18px;
+  }
+
+  /* Logo block */
+  .hero-right {
+    order: -1;
+    margin: 0;              /* REMOVE extra space */
+    padding: 0;
+  }
+
+  .hero-logo {
+    width: 140px;
+    margin: 0 auto 6px;     /* SMALL bottom gap only */
+    transform: none;
+  }
+
+  /* Text block */
+  .hero-left {
+    margin: 0;
+    padding: 0;
+  }
+
+  .hero-title {
+    margin: 4px 0 6px 0;    /* REMOVE default H1 gap */
+    font-size: 30px;
+    line-height: 1.1;
+  }
+
+  .hero-subtitle {
+    margin: 0 0 14px 0;     /* CONTROLLED spacing */
+    font-size: 14.5px;
+  }
+
+  .hero-buttons {
+    margin-top: 8px;
+    gap: 10px;
+  }
+
+  .btn,
+  .btn-primary,
+  .btn-call {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ===============================
+   HERO ICON GROUP
+=============================== */
+
+.hero-icon-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* All round icons */
+.hero-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 🔑 fills circle like WhatsApp */
+}
+
+/* Call icon styling */
+.hero-icon.call svg {
+  width: 18px;
+  height: 18px;
+}
+
+
+
+
+/* =========================
+   MOBILE HERO BUTTON + ICON FIX
+========================= */
+@media (max-width: 768px) {
+
+  .hero-buttons {
+    flex-direction: column;      /* 🔑 STACK */
+    align-items: center;         /* 🔑 CENTER */
+  }
+
+  .hero-icon-group {
+    justify-content: center;     /* center icons */
+    margin-top: 12px;
+  }
+
+  .hero-icon {
+    width: 34px;                 /* smaller icons */
+    height: 34px;
+  }
+
+  .hero-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+.footer-link {
+  color: var(--accent-yellow);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
 }

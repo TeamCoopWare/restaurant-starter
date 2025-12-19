@@ -33,11 +33,12 @@
   flex: 1;
 }
 
-.thumb {
-  width: 110px;
-  height: 74px;
-  border-radius: 10px;
-  object-fit: cover;
+.thumb{
+  width:72px;
+  height:72px;
+  object-fit:cover;      /* 🔑 forces same crop */
+  border-radius:10px;
+  flex-shrink:0;
 }
 
 .menuRight {
@@ -109,4 +110,78 @@
   0%   { transform: scale(1); }
   40%  { transform: scale(1.25); }
   100% { transform: scale(1); }
+}
+
+
+@media (max-width: 768px){
+  .thumb{
+    width:64px;
+    height:64px;
+    border-radius:8px;
+  }
+}
+/* =========================
+   MOBILE ONLY FIXES
+========================= */
+@media (max-width: 768px) {
+
+  /* align image + text nicely */
+  .menuLeft{
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  /* title spacing */
+  .menuLeft h3{
+    margin: 0 0 4px 0;
+    line-height: 1.25;
+    font-size: 16px;
+  }
+
+  /* description readability */
+  .menuLeft p{
+    margin: 0;
+    line-height: 1.4;
+    font-size: 14px;
+    opacity: 0.95;
+  }
+
+  /* price + options alignment */
+  .menuRight{
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+}
+/* =========================
+   MOBILE PRICE ALIGNMENT FIX
+========================= */
+@media (max-width: 768px) {
+
+  /* keep right column aligned */
+  .menuRight{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    min-width: 96px; /* prevents jumping */
+    gap: 6px;
+  }
+
+  /* price alignment */
+  .menuPrice{
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    margin: 0;
+  }
+
+  /* options button alignment */
+  .addBtn{
+    padding: 6px 14px;
+    font-size: 13px;
+    border-radius: 18px;
+    white-space: nowrap;
+  }
+
 }
