@@ -53,7 +53,7 @@ export default function HomePage() {
   </a>
 
   <a
-    href="https://www.facebook.com/share/164c1Jw9Nu/"
+    href="https://www.facebook.com/people/Sedap-Eatery-Authentic-Malaysian-Cuisine/61581615831557"
     target="_blank"
     rel="noreferrer"
     className="hero-icon"
