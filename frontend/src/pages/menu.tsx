@@ -215,7 +215,7 @@ export default function MenuPage() {
         item={selectedItem ?? undefined}
       />
 
-      {/* WHATSAPP */}cd 
+      {/* WHATSAPP */} 
       <a
         href="https://wa.me/61460316046"
         target="_blank"
