@@ -162,7 +162,7 @@
       { "id": "egg-yes", "title": "With Fried Egg", "price": 2.0 },
       { "id": "egg-no", "title": "No Fried Egg", "price": 0 }
     ],
-    "spice": ["Less", "Mild", "Spicy", "Extra Spicy"]
+    "spice": ["Less", "Normal", "Spicy", "Extra Spicy"]
   }
 }
 
@@ -179,7 +179,7 @@
       { "id": "egg-yes", "title": "With Fried Egg", "price": 2.0 },
       { "id": "egg-no", "title": "No Fried Egg", "price": 0 }
     ],
-    "spice": ["Less", "Mild", "Spicy", "Extra Spicy"]
+    "spice": ["Less", "Normal", "Spicy", "Extra Spicy"]
   }
 }
 ,
@@ -201,7 +201,7 @@
       { "id": "egg-yes", "title": "With Fried Egg", "price": 2.0 },
       { "id": "egg-no", "title": "No Fried Egg", "price": 0 }
     ],
-    "spice": ["Less", "Mild", "Spicy", "Extra Spicy"]
+    "spice": ["Less", "Normal", "Spicy", "Extra Spicy"]
   }
 }
 
