@@ -9,7 +9,7 @@ export default function VariantModal({
   open,
   onClose,
   item,
-}: {
+}: { 
   open: boolean;
   onClose: () => void;
   item?: any;
@@ -20,6 +20,7 @@ export default function VariantModal({
   const [eggOption, setEggOption] = useState<"egg" | "no-egg">("no-egg");
   const [spiceLevel, setSpiceLevel] = useState<string>("Mild");
   const [riceType, setRiceType] = useState<string>("Jasmine Rice");
+  
 
   if (!open || !item) return null;
 

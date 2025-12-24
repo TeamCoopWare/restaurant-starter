@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { VIEW_ONLY_MENU } from "../../config/appConfig";
 
+
 import Header from "../components/Header";
 import BananaLeafModal from "../components/BananaLeafModal";
 import VariantModal from "../components/VariantModal";
@@ -17,6 +18,7 @@ export type MenuItem = {
   title: string;
   category?: string;
   price?: number;
+  odooProductId?: number;
   description?: string;
   image?: string;
 
@@ -45,12 +47,10 @@ export default function MenuPage() {
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [bananaBase, setBananaBase] = useState<MenuItem | null>(null);
 
-  /* SAFE MENU ITEMS */
   const menuItems: MenuItem[] = Array.isArray(menuData.items)
-  ? (menuData.items as MenuItem[])
-  : [];
+    ? (menuData.items as MenuItem[])
+    : [];
 
-  /* GROUP BY CATEGORY */
   const categories = menuItems.reduce<Record<string, MenuItem[]>>((acc, it) => {
     const cat = it.category ?? "Uncategorized";
     acc[cat] = acc[cat] || [];
@@ -81,14 +81,12 @@ export default function MenuPage() {
 
   return (
     <>
-      {/* HEADER */}
       <div className="menu-header">
         <Header shrinkOnScroll />
       </div>
 
       <main className={styles.menuPage}>
         <div style={{ height: "80px" }} />
-
         <h1 className={styles.menuTitle}>Full Menu</h1>
 
         {orderedKeys.map((cat) => (
@@ -103,8 +101,8 @@ export default function MenuPage() {
               const hasOptions =
                 (item.variants && item.variants.length > 0) ||
                 item.options?.egg ||
-                item.options?.spice||
-  item.options?.rice;
+                item.options?.spice ||
+                item.options?.rice;
 
               const qty = getQty(item.id);
 
@@ -117,7 +115,6 @@ export default function MenuPage() {
                       className={styles.thumb}
                       alt={item.title}
                     />
-
                     <div>
                       <h3>{item.title}</h3>
                       {item.description && <p>{item.description}</p>}
@@ -126,13 +123,12 @@ export default function MenuPage() {
 
                   {/* RIGHT */}
                   <div className={styles.menuRight}>
-                    {item.price !== undefined && (
-                      <div className={styles.menuPrice}>
-                        ${item.price.toFixed(2)}
-                      </div>
-                    )}
+{typeof item.price === "number" && (
+  <div className={styles.menuPrice}>
+    ${item.price.toFixed(2)}
+  </div>
+)}
 
-                    {/* BANANA LEAF */}
                     {isBanana && (
                       <button
                         className={styles.addBtn}
@@ -145,7 +141,6 @@ export default function MenuPage() {
                       </button>
                     )}
 
-                    {/* OPTIONS */}
                     {!isBanana && hasOptions && (
                       <button
                         className={styles.addBtn}
@@ -158,7 +153,6 @@ export default function MenuPage() {
                       </button>
                     )}
 
-                    {/* ADD (ONLY IF NOT VIEW MODE) */}
                     {!VIEW_ONLY_MENU && !isBanana && !hasOptions && (
                       <div className={styles.qtyWrap}>
                         {qty === 0 ? (
@@ -169,6 +163,9 @@ export default function MenuPage() {
                                 id: item.id,
                                 title: item.title,
                                 price: item.price ?? 0,
+  odooProductId: item.odooProductId, // ✅ ADD THIS
+
+
                                 qty: 1,
                               })
                             }
@@ -202,7 +199,6 @@ export default function MenuPage() {
         ))}
       </main>
 
-      {/* MODALS */}
       <BananaLeafModal
         open={blOpen}
         onClose={() => setBlOpen(false)}
@@ -215,7 +211,6 @@ export default function MenuPage() {
         item={selectedItem ?? undefined}
       />
 
-      {/* WHATSAPP */} 
       <a
         href="https://wa.me/61460316046"
         target="_blank"
@@ -229,21 +224,20 @@ export default function MenuPage() {
         />
       </a>
 
-      {/* FOOTER */}
       <footer className="footer">
         <div className="footer-inner site-container">
-          <div className="footer-brand">Sedap Eatery</div>Shop #4, 10–26 Vale Ave, Valley View, SA
+          <div className="footer-brand">Sedap Eatery</div>
+          Shop #4, 10–26 Vale Ave, Valley View, SA
           <div className="footer-info">
-  Powered by{" "}
-  <a
-    href="https://dispatch.genzonix.com/"
-    target="_blank"
-    rel="noreferrer"
-    className="footer-link"
-  >
-    TeamCoopTech
-  </a>
-
+            Powered by{" "}
+            <a
+              href="https://dispatch.genzonix.com/"
+              target="_blank"
+              rel="noreferrer"
+              className="footer-link"
+            >
+              TeamCoopTech
+            </a>
           </div>
         </div>
       </footer>

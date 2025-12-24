@@ -63,7 +63,7 @@ export default function CartDrawer() {
                 Total: ${total.toFixed(2)}
               </div>
 
-              <Link href="/cart" onClick={closeCart}>
+              <Link href="/checkout" onClick={closeCart}>
                 <button className="checkout-btn">
                   Checkout
                 </button>

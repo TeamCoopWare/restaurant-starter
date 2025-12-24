@@ -17,6 +17,7 @@ export type CartItem = {
   title: string;
   price: number;
   qty: number;
+  odooProductId?: number;
 };
 
 

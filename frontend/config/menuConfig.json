@@ -3,6 +3,7 @@
     {
       "id": "curry-puff",
       "title": "Curry Puff (2 pcs)",
+      "odooProductId": 206,
       "category": "Starters",
       "price": 5.0,
       "description": "Deep-fried Malaysian curry puffs filled with smashed curry potato, onions & aromatic spices.",
@@ -11,6 +12,7 @@
     {
       "id": "veg-spring-roll",
       "title": "Vegetable Spring Roll (4 pcs)",
+  
       "category": "Starters",
       "price": 6.9,
       "description": "Crispy fried spring rolls filled with mixed vegetables, served with sweet chilli dipping sauce.",
@@ -150,6 +152,7 @@
   "title": "Mee Goreng",
   "category": "Noodles",
   "price": 16.5,
+   
   "description": "Stir-fried noodles with vegetables and your choice of protein.",
   "image": "/images/items/mee-goreng.jpg",
   "variants": [
