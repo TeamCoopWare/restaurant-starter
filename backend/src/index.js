@@ -1,12 +1,15 @@
 import express from "express";
 import cors from "cors";
+import Stripe from "stripe";
 
 import "dotenv/config";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2023-10-16",
+});
 const {
   ODOO_URL,
   ODOO_DB,
@@ -319,5 +322,30 @@ app.post("/odoo/order", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, error: err.message });
+  }
+});
+/* ---------- STRIPE TEST CHECKOUT ---------- */
+app.post("/stripe/create-payment-intent", async (req, res) => {
+  try {
+    const { amount } = req.body;
+
+    if (!amount) {
+      return res.status(400).json({ error: "Amount required" });
+    }
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(amount * 100), // dollars → cents
+      currency: "aud",
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+
+    res.json({
+      clientSecret: paymentIntent.client_secret,
+    });
+  } catch (err) {
+    console.error("Stripe error:", err);
+    res.status(500).json({ error: err.message });
   }
 });

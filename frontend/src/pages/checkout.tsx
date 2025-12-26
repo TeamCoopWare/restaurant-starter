@@ -3,58 +3,40 @@ import { useRouter } from "next/router";
 import { useCart } from "../lib/cartContext";
 import Header from "../components/Header";
 
+import { Elements } from "@stripe/react-stripe-js";
+import { stripePromise } from "../lib/stripe";
+import StripeCardForm from "../components/StripeCardForm";
+
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, clearCart } = useCart();
+  const { items } = useCart();
 
+
+
+  /* CUSTOMER */
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [notes, setNotes] = useState("");
-  const [loading, setLoading] = useState(false);
+
+  /* ADDRESS */
+  const [street, setStreet] = useState("");
+  const [suburb, setSuburb] = useState("");
+  const [postcode, setPostcode] = useState("");
 
   const total = items.reduce(
     (sum: number, item: any) => sum + item.price * item.qty,
     0
   );
-const handlePlaceOrder = async () => {
-  if (!name || !phone) {
-    alert("Please enter name and phone number");
-    return;
-  }
 
-  setLoading(true);
-
-  try {
-    const res = await fetch("http://localhost:4000/odoo/order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        customer: { name, phone, notes },
-        items,
-        total,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (!data.success) {
-      throw new Error(data.error || "Order failed");
-    }
-
-    alert(`Order placed! Order #${data.orderId}`);
-    clearCart();
-    router.push("/menu");
-
-  } catch (err: any) {
-    alert(err.message || "Something went wrong");
-  } finally {
-    setLoading(false);
-  }
-};
-
+  /* STRICT FORM VALIDATION */
+  const isFormValid =
+    name.trim().length > 0 &&
+    phone.trim().length > 0 &&
+    street.trim().length > 0 &&
+    suburb.trim().length > 0 &&
+    postcode.trim().length > 0;
 
   return (
-    <>
+    <Elements stripe={stripePromise}>
       <Header />
 
       <main
@@ -67,17 +49,17 @@ const handlePlaceOrder = async () => {
       >
         <div
           style={{
-            maxWidth: 520,
+            maxWidth: 560,
             margin: "0 auto",
             background: "#7A3320",
             borderRadius: 14,
-            padding: 20,
+            padding: 22,
           }}
         >
-          <h1 style={{ marginBottom: 16 }}>Checkout</h1>
+          <h1 style={{ marginBottom: 18 }}>Checkout</h1>
 
           {/* ORDER SUMMARY */}
-          <div style={{ marginBottom: 20 }}>
+          <section style={{ marginBottom: 22 }}>
             {items.map((item: any) => (
               <div
                 key={item.id}
@@ -85,7 +67,6 @@ const handlePlaceOrder = async () => {
                   display: "flex",
                   justifyContent: "space-between",
                   marginBottom: 8,
-                  fontSize: 15,
                 }}
               >
                 <span>
@@ -95,7 +76,7 @@ const handlePlaceOrder = async () => {
               </div>
             ))}
 
-            <hr style={{ opacity: 0.3, margin: "12px 0" }} />
+            <hr style={{ opacity: 0.3, margin: "14px 0" }} />
 
             <div
               style={{
@@ -108,68 +89,127 @@ const handlePlaceOrder = async () => {
               <span>Total</span>
               <span>${total.toFixed(2)}</span>
             </div>
-          </div>
+          </section>
 
           {/* CUSTOMER DETAILS */}
-          <div style={{ marginBottom: 14 }}>
+          <section style={{ marginBottom: 18 }}>
+            <h3 style={sectionTitle}>Customer Details</h3>
+
             <label>Name *</label>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               style={inputStyle}
             />
-          </div>
 
-          <div style={{ marginBottom: 14 }}>
             <label>Phone *</label>
             <input
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               style={inputStyle}
             />
-          </div>
+          </section>
 
-          <div style={{ marginBottom: 18 }}>
-            <label>Order Notes</label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={3}
-              style={{ ...inputStyle, resize: "none" }}
-              placeholder="e.g. Less spicy, no peanuts"
+          {/* ADDRESS */}
+          <section style={{ marginBottom: 18 }}>
+            <h3 style={sectionTitle}>Delivery Address</h3>
+
+            <label>Street *</label>
+            <input
+              value={street}
+              onChange={(e) => setStreet(e.target.value)}
+              style={inputStyle}
             />
-          </div>
 
-          {/* ACTION */}
-          <button
-            onClick={handlePlaceOrder}
-            disabled={loading}
-            style={{
-              width: "100%",
-              padding: "14px",
-              background: "#2F7D32",
-              border: "none",
-              borderRadius: 10,
-              color: "#fff",
-              fontSize: 16,
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
-          >
-            {loading ? "Placing Order..." : "Place Order"}
-          </button>
+            <label>Suburb *</label>
+            <input
+              value={suburb}
+              onChange={(e) => setSuburb(e.target.value)}
+              style={inputStyle}
+            />
+
+            <label>Postcode *</label>
+            <input
+              value={postcode}
+              onChange={(e) => setPostcode(e.target.value)}
+              style={inputStyle}
+            />
+          </section>
+
+          {/* PAYMENT */}
+          <section style={{ marginBottom: 24 }}>
+            <h3 style={sectionTitle}>Card Details *</h3>
+
+            <div
+              style={{
+                opacity: isFormValid ? 1 : 0.5,
+                pointerEvents: isFormValid ? "auto" : "none",
+              }}
+            >
+              <StripeCardForm
+                amount={total}
+                customer={{
+                  name,
+                  phone,
+                  address: {
+                    line1: street,
+                    city: suburb,
+                    postal_code: postcode,
+                    country: "AU",
+                  },
+                }}
+                disabled={!isFormValid}
+              />
+            </div>
+
+            {!isFormValid && (
+              <p style={{ color: "#FFD700", marginTop: 8 }}>
+                Please complete all required fields before payment.
+              </p>
+            )}
+          </section>
+
+          {/* NAVIGATION */}
+          <div style={{ display: "flex", gap: 12, 
+           }}>
+            <button
+              onClick={() => router.push("/menu")}
+              style={secondaryBtn} 
+             
+            >
+              ← Return to Menu
+            </button>
+          </div>
         </div>
       </main>
-    </>
+    </Elements>
   );
 }
 
+/* STYLES */
 const inputStyle: React.CSSProperties = {
   width: "100%",
   marginTop: 6,
+  marginBottom: 12,
   padding: "10px 12px",
   borderRadius: 8,
   border: "none",
   fontSize: 14,
 };
-console.log("ODOO URL:", process.env.ODOO_URL);
+
+const sectionTitle: React.CSSProperties = {
+  marginBottom: 10,
+  fontSize: 16,
+  fontWeight: 600,
+};
+
+const secondaryBtn: React.CSSProperties = {
+  flex: 1,
+  padding: 14,
+  background: "#555",
+  border: "none",
+  borderRadius: 10,
+  color: "#fff",
+  fontSize: 15,
+  cursor: "pointer",
+};
