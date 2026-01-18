@@ -1,0 +1,38 @@
+exports.handler = async function (context, event, callback) {
+  try {
+    const client = context.getTwilioClient();
+    const paymentIntent = event.data?.object;
+    if (!paymentIntent) {
+      return callback(null, { skipped: "No payment intent" });
+    }
+    // ONLINE ORDER 
+    const description = paymentIntent.description || "";
+    const metadata = paymentIntent.metadata || {};
+    const hasOdooReference =
+      description.match(/\d+-\d+-\d+/) || // e.g. 260-1-000003
+      metadata.order_id ||
+      metadata.odoo_order ||
+      metadata.reference;
+    if (!hasOdooReference) {
+      // no POS / terminal / manual Stripe payment
+      return callback(null, { skipped: "Not an Odoo online order" });
+    }
+ // ONLINE ORDER — proceed
+    const rawAmount = paymentIntent.amount_received || 0;
+    const amount = (rawAmount / 100).toFixed(2);
+    await client.studio
+      .flows(context.STUDIO_FLOW_SID)
+      .executions
+      .create({
+        to: `whatsapp:${context.WHATSAPP_TO}`,
+        from: `whatsapp:${context.WHATSAPP_FROM}`,
+        parameters: {
+          amount: `$${amount}`,
+          reference: description }
+      });
+    callback(null, { success: true });
+  } catch (error) {
+    console.error(error);
+    callback(error);
+  }
+};
