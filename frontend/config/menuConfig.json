@@ -613,7 +613,7 @@
       "category": "Dessert",
       "price": 6.0,
       "description": "Traditional Malaysian kuih.",
-      "image": "/images/items/placeholder.jpg"
+      "image": "/images/items/kuihcorner.jpg"
     },
     {
       "id": "addon-fried-egg",
@@ -676,7 +676,7 @@
       "category": "Add-ons",
       "price": 2.0,
       "description": "Add chicken to any dish.",
-      "image": "/images/items/addonchicken.jpg"
+      "image": "/images/addonchicken.jpg"
     },
     {
       "id": "addon-seafood",
@@ -685,7 +685,7 @@
       "category": "Add-ons",
       "price": 2.0,
       "description": "Add seafood to any dish.",
-      "image": "/images/items/addonprawn.jpg"
+      "image": "/images/addonprawn.jpg"
     },
     {
       "id": "addon-veggies",
@@ -730,7 +730,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 6.9,
       "description": "Black tea with lime served over ice.",
-      "image": "/images/items/teh-tarik.jpg"
+      "image": "/images/items/teholimau.jpg"
     },
     {
       "id": "drink-kopi-c-ais",
@@ -739,7 +739,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 6.9,
       "description": "Malaysian iced coffee with evaporated milk.",
-      "image": "/images/items/kopicais.jpg"
+      "image": "/images/kopicais.jpg"
     },
     {
       "id": "drink-kopi-c-hot",
@@ -748,7 +748,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 5.9,
       "description": "Malaysian hot coffee with evaporated milk.",
-      "image": "/images/items/kopichot.jpg"
+      "image": "/images/kopichot.jpg"
     },
     {
       "id": "drink-sirap-ais",
@@ -829,7 +829,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 5.9,
       "description": "Creamy Thai iced milk tea.",
-      "image": "/images/items/thaimilktea.jpg"
+      "image": "/images/thaimilktea.jpg"
     },
     {
       "id": "drink-nescafe-ais",
@@ -838,7 +838,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 6.9,
       "description": "Chilled Nescafe served over ice.",
-      "image": "/images/items/nescafeais.jpg"
+      "image": "/images/nescafeais.jpg"
     },
     {
       "id": "drink-nescafe-hot",
@@ -847,7 +847,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 5.9,
       "description": "Hot Nescafe coffee.",
-      "image": "/images/items/nescafehot.jpg"
+      "image": "/images/nescafehot.jpg"
     },
     {
       "id": "soft-coke",
