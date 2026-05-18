@@ -802,7 +802,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 5.9,
       "description": "Hot Malaysian chocolate malt drink.",
-      "image": "/images/items/milo-ais.jpg"
+      "image": "/images/items/milopanas.jpg"
     },
     {
       "id": "drink-milo-dino",
@@ -811,7 +811,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 7.9,
       "description": "Milo with extra Milo powder on top.",
-      "image": "/images/items/milo-ais.jpg"
+      "image": "/images/items/milodino.jpg"
     },
     {
       "id": "drink-karak-chai",
