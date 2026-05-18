@@ -43,7 +43,7 @@
       "category": "Starters",
       "price": 15.9,
       "description": "A selection of our best starters.",
-      "image": "/images/items/startersample.jpg"
+      "image": "/images/startersample.jpg"
     },
     {
       "id": "crumbed-prawn-cake",
@@ -52,7 +52,7 @@
       "category": "Starters",
       "price": 11.9,
       "description": "Crispy crumbed prawn cakes served with dipping sauce.",
-      "image": "/images/items/crumblesprawn.jpg"
+      "image": "/images/crumblesprawn.jpg"
     },
     {
       "id": "nasi-goreng-cina",
@@ -144,7 +144,7 @@
       "category": "Rice Meals",
       "price": 20.9,
       "description": "Juicy prawns in rich spicy sambal served with plain rice.",
-      "image": "/images/items/placeholder.jpg"
+      "image": "/images/items/prawnrice.jpg"
     },
     {
       "id": "nasi-lemak-biasa",
