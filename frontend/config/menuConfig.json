@@ -43,7 +43,7 @@
       "category": "Starters",
       "price": 15.9,
       "description": "A selection of our best starters.",
-      "image": "/images/items/placeholder.jpg"
+      "image": "/images/items/startersample.jpg"
     },
     {
       "id": "crumbed-prawn-cake",
@@ -52,7 +52,7 @@
       "category": "Starters",
       "price": 11.9,
       "description": "Crispy crumbed prawn cakes served with dipping sauce.",
-      "image": "/images/items/placeholder.jpg"
+      "image": "/images/items/crumblesprawn.jpg"
     },
     {
       "id": "nasi-goreng-cina",
@@ -676,7 +676,7 @@
       "category": "Add-ons",
       "price": 2.0,
       "description": "Add chicken to any dish.",
-      "image": "/images/items/placeholder.jpg"
+      "image": "/images/items/addonchicken.jpg"
     },
     {
       "id": "addon-seafood",
@@ -685,7 +685,7 @@
       "category": "Add-ons",
       "price": 2.0,
       "description": "Add seafood to any dish.",
-      "image": "/images/items/placeholder.jpg"
+      "image": "/images/items/addonprawn.jpg"
     },
     {
       "id": "addon-veggies",
@@ -739,7 +739,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 6.9,
       "description": "Malaysian iced coffee with evaporated milk.",
-      "image": "/images/items/placeholder.jpg"
+      "image": "/images/items/kopicais.jpg"
     },
     {
       "id": "drink-kopi-c-hot",
@@ -748,7 +748,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 5.9,
       "description": "Malaysian hot coffee with evaporated milk.",
-      "image": "/images/items/placeholder.jpg"
+      "image": "/images/items/kopichot.jpg"
     },
     {
       "id": "drink-sirap-ais",
@@ -775,7 +775,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 5.5,
       "description": "Fresh lime juice served over ice.",
-      "image": "/images/items/placeholder.jpg"
+      "image": "/images/items/limauais.jpg"
     },
     {
       "id": "drink-bandung-ais",
@@ -829,7 +829,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 5.9,
       "description": "Creamy Thai iced milk tea.",
-      "image": "/images/items/placeholder.jpg"
+      "image": "/images/items/thaimilktea.jpg"
     },
     {
       "id": "drink-nescafe-ais",
@@ -838,7 +838,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 6.9,
       "description": "Chilled Nescafe served over ice.",
-      "image": "/images/items/placeholder.jpg"
+      "image": "/images/items/nescafeais.jpg"
     },
     {
       "id": "drink-nescafe-hot",
@@ -847,7 +847,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 5.9,
       "description": "Hot Nescafe coffee.",
-      "image": "/images/items/placeholder.jpg"
+      "image": "/images/items/nescafehot.jpg"
     },
     {
       "id": "soft-coke",
