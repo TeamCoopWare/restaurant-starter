@@ -721,7 +721,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 5.9,
       "description": "Chilled black tea with sugar served over ice.",
-      "image": "/images/items/teh-tarik.jpg"
+      "image": "/images/items/tehoais.jpg"
     },
     {
       "id": "drink-teh-o-limau",
@@ -766,7 +766,7 @@
       "category": "Signature Malaysian Drinks",
       "price": 6.9,
       "description": "Rose syrup with lime served over ice.",
-      "image": "/images/items/sirap-ais.jpg"
+      "image": "/images/items/siraplimauais.jpg"
     },
     {
       "id": "drink-limau-ais",
