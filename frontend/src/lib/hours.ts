@@ -9,7 +9,8 @@
 
 // Weekday numbers the restaurant is CLOSED. 0=Sun,1=Mon,2=Tue,…,6=Sat.
 // Sedap is closed Mondays & Tuesdays.
-export const CLOSED_WEEKDAYS = [1, 2];
+// ⚠️ TEMPORARILY OPEN ALL DAYS FOR TESTING — restore to [1, 2] (Mon & Tue) before real launch.
+export const CLOSED_WEEKDAYS: number[] = [];
 
 const TZ =
   (typeof process !== "undefined" && process.env.NEXT_PUBLIC_TIMEZONE) ||
