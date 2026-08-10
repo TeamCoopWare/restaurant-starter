@@ -530,7 +530,7 @@ html,body,#__next{
    User asked: make these look like the site theme and not plain white.
 ============================= */
 .variant-list { margin-top: 12px; }
-
+.bl-modal{position: relative;}
 /* Variant row cards (white interior with thin gold border and warm box-shadow) */
 .variant-row {
   background: #fff; /* interior white block */
@@ -563,7 +563,10 @@ html,body,#__next{
    (If any JS adds/removes classes, keep this flexible.)
 */
 .menu-right .menu-price.hidden-with-options { display: none; }
-
+.variant-row.radio-row {
+  background: transparent !important;
+  border: none !important;
+}
 /* =============================
    BANANA LEAF MODAL: specialized styling (leaf texture + dark overlay)
    Keep this distinct (green theme) and very readable
@@ -1239,4 +1242,31 @@ html,body,#__next{
 
 .footer-link:hover {
   text-decoration: underline;
+}
+.variant-close-top {
+  
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: transparent;
+  border: 2px solid #FFD700;
+  color: #FFD700;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.cart-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: 2px solid #FFD700;
+  color: #FFD700;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  cursor: pointer;
 }

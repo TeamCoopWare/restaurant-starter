@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import Link from "next/link";
+import { CLOSED_DAYS_LABEL, OPEN_DAYS_LABEL } from "../lib/hours";
 
 export default function HomePage() {
   return (
@@ -17,8 +18,28 @@ export default function HomePage() {
               Authentic Malaysian cuisine — handcrafted daily using traditional recipes and fragrant spices.
             </p>
 
+            <div
+              className="hero-hours"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: "rgba(0,0,0,0.25)",
+                border: "1px solid rgba(255,208,66,0.5)",
+                color: "#FFD042",
+                borderRadius: 999,
+                padding: "6px 14px",
+                fontWeight: 600,
+                fontSize: 14,
+                margin: "4px 0 14px",
+              }}
+            >
+              <span aria-hidden>🕒</span>
+              <span>{OPEN_DAYS_LABEL} · {CLOSED_DAYS_LABEL}</span>
+            </div>
+
             <div className="hero-buttons">
-              <Link href="/menu" className="btn btn-primary">View Menu →</Link>
+              <Link href="/menu" className="btn btn-primary">Order Now →</Link>
               
               
 <div className="hero-icon-group">
@@ -119,6 +140,9 @@ export default function HomePage() {
       <footer className="footer">
         <div className="footer-inner site-container">
           <div className="footer-brand">Sedap Eatery</div>Shop #4, 10–26 Vale Ave, Valley View, SA
+          <div className="footer-hours" style={{ marginTop: 6, fontWeight: 600, color: "#FFD042" }}>
+            {OPEN_DAYS_LABEL} · {CLOSED_DAYS_LABEL}
+          </div>
           <div className="footer-info">
   Powered by{" "}
   <a

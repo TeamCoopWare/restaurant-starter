@@ -15,10 +15,17 @@ import { VIEW_ONLY_MENU } from "../../config/appConfig";
 export type CartItem = {
   id: string;
   title: string;
+  displayName?: string;
   price: number;
   qty: number;
+
+  // 🔑 REQUIRED FOR ODOO
   odooProductId?: number;
+
+  // 🔑 HUMAN READABLE LINE (kitchen / POS)
+  name?: string;
 };
+
 
 
 type State = {

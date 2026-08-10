@@ -2,354 +2,857 @@
   "items": [
     {
       "id": "curry-puff",
-      "title": "Curry Puff (2 pcs)",
-      "odooProductId": 206,
+      "title": "Curry Puff (3 pcs)",
+      "odooProductId": 10,
       "category": "Starters",
-      "price": 5.0,
+      "price": 6.9,
       "description": "Deep-fried Malaysian curry puffs filled with smashed curry potato, onions & aromatic spices.",
       "image": "/images/items/curry-puff.jpg"
     },
     {
       "id": "veg-spring-roll",
       "title": "Vegetable Spring Roll (4 pcs)",
-  
+      "odooProductId": 8,
       "category": "Starters",
-      "price": 6.9,
+      "price": 7.9,
       "description": "Crispy fried spring rolls filled with mixed vegetables, served with sweet chilli dipping sauce.",
       "image": "/images/items/veg-spring-roll.jpg"
     },
     {
       "id": "cucuk-udang",
-      "title": "Cucuk Udang (2 pcs)",
+      "title": "Cucuk Udang (3 pieces)",
+      "odooProductId": 9,
       "category": "Starters",
-      "price": 7.9,
+      "price": 9.9,
       "description": "Crispy prawn fritters served with peanut sauce.",
       "image": "/images/items/cucuk-udang.jpg"
     },
     {
       "id": "roti-canai",
-      "title": "Roti Canai with Curry & Dhal (2 pcs)",
+      "title": "Roti Canai with Curry and Dhal (2 pcs)",
+      "odooProductId": 3,
       "category": "Starters",
-      "price": 10.5,
+      "price": 10.9,
       "description": "Flaky Malaysian flatbread served with curry and dhal.",
       "image": "/images/items/roti-canai.jpg"
     },
-
+    {
+      "id": "starter-sampler",
+      "title": "Starter Sampler",
+      "odooProductId": 0,
+      "category": "Starters",
+      "price": 15.9,
+      "description": "A selection of our best starters.",
+      "image": "/images/items/placeholder.jpg"
+    },
+    {
+      "id": "crumbed-prawn-cake",
+      "title": "Crumbed Prawn Cake (3 pieces)",
+      "odooProductId": 0,
+      "category": "Starters",
+      "price": 11.9,
+      "description": "Crispy crumbed prawn cakes served with dipping sauce.",
+      "image": "/images/items/placeholder.jpg"
+    },
     {
       "id": "nasi-goreng-cina",
       "title": "Nasi Goreng Cina",
       "category": "Rice Meals",
-      "price": 16.5,
+      "price": 17.9,
       "description": "Fried rice with your choice of protein and vegetables.",
       "image": "/images/items/nasi-goreng-cina.jpg",
       "variants": [
-        { "id": "nasi-goreng-cina-chicken", "title": "Chicken", "price": 16.5 },
-        { "id": "nasi-goreng-cina-prawn", "title": "Prawn", "price": 18.5 },
-        { "id": "nasi-goreng-cina-combo", "title": "Combo (Chicken + Prawn)", "price": 19.5 }
-      ], "options": {
-  "egg": true
-}
-
+        {
+          "id": "nasi-goreng-cina-chicken",
+          "odooProductId": 5,
+          "title": "Chicken",
+          "price": 17.9
+        },
+        {
+          "id": "nasi-goreng-cina-prawn",
+          "odooProductId": 6,
+          "title": "Prawn",
+          "price": 19.9
+        },
+        {
+          "id": "nasi-goreng-cina-combo",
+          "odooProductId": 7,
+          "title": "Combo",
+          "price": 20.9
+        }
+      ],
+      "options": {
+        "egg": [
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
+          },
+          {
+            "id": "egg-no",
+            "title": "No Fried Egg",
+            "price": 0
+          }
+        ]
+      }
     },
     {
       "id": "nasi-goreng-kampung",
       "title": "Nasi Goreng Kampung (Spicy)",
+      "odooProductId": 11,
       "category": "Rice Meals",
-      "price": 17.5,
+      "price": 18.9,
       "description": "Spicy kampung-style fried rice topped with crispy anchovies.",
       "image": "/images/items/nasi-goreng-kampung.jpg",
       "options": {
-  "spice": true
-}
-
+        "spice": [
+          "Less",
+          "Normal",
+          "Spicy",
+          "Extra Spicy"
+        ]
+      }
+    },
+    {
+      "id": "chicken-curry-rice",
+      "title": "Chicken Rendang with Plain Rice",
+      "odooProductId": 27,
+      "category": "Rice Meals",
+      "price": 18.9,
+      "description": "Aromatic Malaysian chicken rendang slow cooked with your choice of rice.",
+      "image": "/images/items/chicken-curry-jasmine.jpg",
+      "options": {
+        "rice": true
+      }
+    },
+    {
+      "id": "beef-rendang-rice",
+      "title": "Beef Rendang with RICE",
+      "odooProductId": 28,
+      "category": "Rice Meals",
+      "price": 20.9,
+      "description": "Malay Classic featuring slow braised beef with your choice of rice.",
+      "image": "/images/items/beef-rendang-jasmine.jpg",
+      "options": {
+        "rice": true
+      }
+    },
+    {
+      "id": "prawn-sambal-rice",
+      "title": "Prawn Sambal with Plain Rice",
+      "odooProductId": 0,
+      "category": "Rice Meals",
+      "price": 20.9,
+      "description": "Juicy prawns in rich spicy sambal served with plain rice.",
+      "image": "/images/items/placeholder.jpg"
     },
     {
       "id": "nasi-lemak-biasa",
       "title": "Nasi Lemak Biasa",
+      "odooProductId": 12,
       "category": "Nasi Lemak",
-      "price": 10.5,
+      "price": 10.9,
       "description": "Coconut rice with sambal, anchovies, peanuts and cucumber.",
       "image": "/images/items/nasi-lemak-biasa.jpg",
       "options": {
-  "egg": true
-}
-
-    }, 
-    {
-      "id": "chicken-curry-rice",
-      "title": "Chicken Curry with Rice",
-      "category": "Rice Meals",
-      "price": 16.5,
-      "description": "Aromatic Malaysian chicken curry slow cooked with your choice of rice",
-      "image": "/images/items/chicken-curry-jasmine.jpg",
-       "options": {
-    "rice": true
-  }
-    },
-    {
-      "id": "beef-rendang-rice",
-      "title": "Beef Rendang with Rice",
-      "category": "Rice Meals",
-      "price": 18.5,
-      "description": "Malay Classic featuring slow braised beef with your choice of rice",
-      "image": "/images/items/beef-rendang-jasmine.jpg",
-       "options": {
-    "rice": true
-  }
+        "egg": [
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
+          },
+          {
+            "id": "egg-no",
+            "title": "No Fried Egg",
+            "price": 0
+          }
+        ],
+        "sambal": [
+          {
+            "id": "sambal-no",
+            "title": "No Extra Sambal",
+            "price": 0
+          },
+          {
+            "id": "sambal-extra",
+            "title": "Extra Sambal Sauce",
+            "price": 3.0
+          }
+        ]
+      }
     },
     {
       "id": "nasi-lemak-ayam",
       "title": "Nasi Lemak Ayam Goreng Berempah",
+      "odooProductId": 13,
       "category": "Nasi Lemak",
-      "price": 18.5,
+      "price": 20.9,
       "description": "Coconut rice with spiced fried chicken, sambal and sides.",
       "image": "/images/items/nasi-lemak-ayam.jpg",
       "options": {
-  "egg": true
-}
-
+        "egg": [
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
+          },
+          {
+            "id": "egg-no",
+            "title": "No Fried Egg",
+            "price": 0
+          }
+        ],
+        "sambal": [
+          {
+            "id": "sambal-no",
+            "title": "No Extra Sambal",
+            "price": 0
+          },
+          {
+            "id": "sambal-extra",
+            "title": "Extra Sambal Sauce",
+            "price": 3.0
+          }
+        ]
+      }
     },
     {
       "id": "nasi-lemak-rendang",
       "title": "Nasi Lemak Beef Rendang",
+      "odooProductId": 14,
       "category": "Nasi Lemak",
-      "price": 20.5,
+      "price": 22.9,
       "description": "Coconut rice served with slow-cooked beef rendang.",
       "image": "/images/items/beef-rendang-jasmine.jpg",
       "options": {
-  "egg": true
-}
-
+        "egg": [
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
+          },
+          {
+            "id": "egg-no",
+            "title": "No Fried Egg",
+            "price": 0
+          }
+        ],
+        "sambal": [
+          {
+            "id": "sambal-no",
+            "title": "No Extra Sambal",
+            "price": 0
+          },
+          {
+            "id": "sambal-extra",
+            "title": "Extra Sambal Sauce",
+            "price": 3.0
+          }
+        ]
+      }
     },
-
+    {
+      "id": "nasi-lemak-chicken-rendang",
+      "title": "Nasi Lemak Chicken Rendang",
+      "odooProductId": 0,
+      "category": "Nasi Lemak",
+      "price": 19.9,
+      "description": "Coconut rice served with slow-cooked chicken rendang.",
+      "image": "/images/items/nasi-lemak-beef.jpg",
+      "options": {
+        "egg": [
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
+          },
+          {
+            "id": "egg-no",
+            "title": "No Fried Egg",
+            "price": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "nasi-lemak-prawn-sambal",
+      "title": "Nasi Lemak Prawn Sambal",
+      "odooProductId": 0,
+      "category": "Nasi Lemak",
+      "price": 21.9,
+      "description": "Coconut rice served with juicy prawns in rich sambal.",
+      "image": "/images/items/nasi-lemak-biasa.jpg"
+    },
     {
       "id": "banana-leaf-set-veg",
-      "title": "Banana Leaf Set",
+      "title": "Banana Leaf Set - Vegetarian",
+      "odooProductId": 70,
       "category": "Banana Leaf Weekend Lunch Special",
       "price": 21.9,
       "description": "A traditional South Indian banana leaf meal featuring three freshly prepared vegetable dishes, served with sambar, rasam, papadam & Kesari.",
       "image": "/images/items/banana-leaf-set-veg.jpg"
     },
-
     {
       "id": "curry-laksa",
       "title": "Curry Laksa",
       "category": "Noodles",
-      "price": 16.5,
+      "price": 17.9,
       "description": "Aromatic coconut curry noodle soup with your choice of protein.",
       "image": "/images/items/curry-laksa.jpg",
       "variants": [
-        { "id": "curry-laksa-chicken", "title": "Chicken", "price": 16.5 },
-        { "id": "curry-laksa-prawn", "title": "Prawn", "price": 18.5 },
-        { "id": "curry-laksa-combo", "title": "Combo", "price": 19.5 }
-      ], "options": {
-  "egg": true
-}
-
+        {
+          "id": "curry-laksa-chicken",
+          "odooProductId": 17,
+          "title": "Chicken",
+          "price": 17.9
+        },
+        {
+          "id": "curry-laksa-prawn",
+          "odooProductId": 64,
+          "title": "Prawn",
+          "price": 19.9
+        },
+        {
+          "id": "curry-laksa-combo",
+          "odooProductId": 18,
+          "title": "Combo",
+          "price": 20.9
+        }
+      ],
+      "options": {
+        "egg": [
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
+          },
+          {
+            "id": "egg-no",
+            "title": "No Fried Egg",
+            "price": 0
+          }
+        ]
+      }
     },
     {
-  "id": "mee-goreng",
-  "title": "Mee Goreng",
-  "category": "Noodles",
-  "price": 16.5,
-   
-  "description": "Stir-fried noodles with vegetables and your choice of protein.",
-  "image": "/images/items/mee-goreng.jpg",
-  "variants": [
-    { "id": "mee-goreng-chicken", "title": "Chicken", "price": 16.5 },
-    { "id": "mee-goreng-prawn", "title": "Prawn", "price": 18.5 },
-    { "id": "mee-goreng-combo", "title": "Combo", "price": 19.5 }
-  ],
-  "options": {
-    "egg": [
-      { "id": "egg-yes", "title": "With Fried Egg", "price": 2.0 },
-      { "id": "egg-no", "title": "No Fried Egg", "price": 0 }
-    ],
-    "spice": ["Less", "Normal", "Spicy", "Extra Spicy"]
-  }
-}
-
-,
-     {
-  "id": "maggi-goreng",
-  "title": "Maggi Goreng",
-  "category": "Noodles",
-  "price": 16.5,
-  "description": "Wok-tossed noodles with savoury sauce, veggies and chicken.",
-  "image": "/images/items/maggi-goreng.jpg",
-  "options": {
-    "egg": [
-      { "id": "egg-yes", "title": "With Fried Egg", "price": 2.0 },
-      { "id": "egg-no", "title": "No Fried Egg", "price": 0 }
-    ],
-    "spice": ["Less", "Normal", "Spicy", "Extra Spicy"]
-  }
-}
-,
-
-   {
-  "id": "kway-teow-goreng",
-  "title": "Kway Teow Goreng",
-  "category": "Noodles",
-  "price": 16.5,
-  "description": "Wok-fried flat rice noodles with your choice of protein.",
-  "image": "/images/items/kway-teow-goreng.jpg",
-  "variants": [
-    { "id": "kway-teow-chicken", "title": "Chicken", "price": 16.5 },
-    { "id": "kway-teow-prawn", "title": "Prawn", "price": 18.5 },
-    { "id": "kway-teow-combo", "title": "Combo", "price": 19.5 }
-  ],
-  "options": {
-    "egg": [
-      { "id": "egg-yes", "title": "With Fried Egg", "price": 2.0 },
-      { "id": "egg-no", "title": "No Fried Egg", "price": 0 }
-    ],
-    "spice": ["Less", "Normal", "Spicy", "Extra Spicy"]
-  }
-}
-
-,
-
-    
-  
-
+      "id": "mee-goreng",
+      "title": "Mee Goreng",
+      "category": "Noodles",
+      "price": 17.9,
+      "description": "Stir-fried noodles with vegetables and your choice of protein.",
+      "image": "/images/items/mee-goreng.jpg",
+      "variants": [
+        {
+          "id": "mee-goreng-chicken",
+          "odooProductId": 19,
+          "title": "Chicken",
+          "price": 17.9
+        },
+        {
+          "id": "mee-goreng-prawn",
+          "odooProductId": 20,
+          "title": "Prawn",
+          "price": 19.9
+        },
+        {
+          "id": "mee-goreng-combo",
+          "odooProductId": 21,
+          "title": "Combo",
+          "price": 21.9
+        }
+      ],
+      "options": {
+        "egg": [
+          {
+            "id": "egg-no",
+            "title": "No Fried Egg",
+            "price": 0
+          },
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
+          }
+        ],
+        "spice": [
+          "Less",
+          "Normal",
+          "Spicy",
+          "Extra Spicy"
+        ]
+      }
+    },
+    {
+      "id": "mi-hun-goreng",
+      "title": "Mi Hun Goreng",
+      "category": "Noodles",
+      "price": 17.9,
+      "description": "Stir-fried vermicelli noodles with your choice of protein.",
+      "image": "/images/items/mee-goreng.jpg",
+      "variants": [
+        {
+          "id": "mi-hun-goreng-chicken",
+          "odooProductId": 0,
+          "title": "Chicken",
+          "price": 17.9
+        },
+        {
+          "id": "mi-hun-goreng-prawn",
+          "odooProductId": 0,
+          "title": "Prawn",
+          "price": 19.9
+        },
+        {
+          "id": "mi-hun-goreng-combo",
+          "odooProductId": 0,
+          "title": "Combo",
+          "price": 21.9
+        }
+      ],
+      "options": {
+        "spice": [
+          "Less",
+          "Normal",
+          "Spicy",
+          "Extra Spicy"
+        ]
+      }
+    },
+    {
+      "id": "maggi-goreng",
+      "title": "Maggi Goreng",
+      "odooProductId": 26,
+      "category": "Noodles",
+      "price": 17.9,
+      "description": "Wok-tossed Maggi noodles with savoury sauce, veggies and chicken.",
+      "image": "/images/items/maggi-goreng.jpg",
+      "options": {
+        "egg": [
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
+          },
+          {
+            "id": "egg-no",
+            "title": "No Fried Egg",
+            "price": 0
+          }
+        ],
+        "spice": [
+          "Less",
+          "Normal",
+          "Spicy",
+          "Extra Spicy"
+        ]
+      }
+    },
+    {
+      "id": "kway-teow-goreng",
+      "title": "Kway Teow Goreng",
+      "category": "Noodles",
+      "price": 18.9,
+      "description": "Wok-fried flat rice noodles with your choice of protein.",
+      "image": "/images/items/kway-teow-goreng.jpg",
+      "variants": [
+        {
+          "id": "kway-teow-chicken",
+          "odooProductId": 23,
+          "title": "Chicken",
+          "price": 18.9
+        },
+        {
+          "id": "kway-teow-prawn",
+          "odooProductId": 65,
+          "title": "Prawn",
+          "price": 20.9
+        },
+        {
+          "id": "kway-teow-combo",
+          "odooProductId": 25,
+          "title": "Combo",
+          "price": 22.9
+        }
+      ],
+      "options": {
+        "egg": [
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
+          },
+          {
+            "id": "egg-no",
+            "title": "No Fried Egg",
+            "price": 0
+          }
+        ],
+        "spice": [
+          "Less",
+          "Normal",
+          "Spicy",
+          "Extra Spicy"
+        ]
+      }
+    },
     {
       "id": "kids-mee-goreng",
       "title": "Kids Mee Goreng",
       "category": "Kids",
-      "price": 11.5,
-      "description": "Smaller portion of mee goreng — kid friendly.",
+      "price": 11.9,
+      "description": "Smaller portion of mee goreng \u2014 kid friendly.",
       "image": "/images/items/mee-goreng.jpg",
       "variants": [
-        { "id": "kids-mee-goreng", "title": "None", "price": 11.5 },
-    { "id": "kids-mee-goreng", "title": "Chicken", "price": 12.5 },
-    { "id": "kids-mee-goreng", "title": "Prawn", "price": 13.5 },
-    { "id": "kids-mee-goreng", "title": "Combo", "price": 14.5 }
-  ],
-  
+        {
+          "id": "kids-mee-goreng-none",
+          "odooProductId": 78,
+          "title": "None",
+          "price": 11.9
+        },
+        {
+          "id": "kids-mee-goreng-chicken",
+          "odooProductId": 75,
+          "title": "Chicken",
+          "price": 12.9
+        },
+        {
+          "id": "kids-mee-goreng-prawn",
+          "odooProductId": 76,
+          "title": "Prawn",
+          "price": 13.9
+        },
+        {
+          "id": "kids-mee-goreng-combo",
+          "odooProductId": 77,
+          "title": "Combo",
+          "price": 14.9
+        }
+      ],
       "options": {
-    "egg": true,
-    "spice": true
-  }
-
+        "egg": [
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
+          },
+          {
+            "id": "egg-no",
+            "title": "No Fried Egg",
+            "price": 0
+          }
+        ],
+        "spice": [
+          "Less",
+          "Normal",
+          "Spicy",
+          "Extra Spicy"
+        ]
+      }
     },
     {
       "id": "kids-fried-rice",
       "title": "Kids Fried Rice",
       "category": "Kids",
-      "price": 11.5,
+      "price": 11.9,
       "description": "Jasmine rice with egg and mixed vegetables.",
       "image": "/images/items/nasi-goreng-cina.jpg",
-       "variants": [
-        { "id": "kids-fried-rice", "title": "None", "price": 11.5 },
-    { "id": "kids-fried-rice", "title": "Chicken", "price": 12.5 },
-    { "id": "kids-fried-rice", "title": "Prawn", "price": 13.5 },
-    { "id": "kids-fried-rice", "title": "Combo", "price": 14.5 }
-  ],
-       "options": {
-    "egg": true
-  }
+      "variants": [
+        {
+          "id": "kids-fried-rice-none",
+          "odooProductId": 74,
+          "title": "None",
+          "price": 11.9
+        },
+        {
+          "id": "kids-fried-rice-chicken",
+          "odooProductId": 71,
+          "title": "Chicken",
+          "price": 12.9
+        },
+        {
+          "id": "kids-fried-rice-prawn",
+          "odooProductId": 72,
+          "title": "Prawn",
+          "price": 13.9
+        },
+        {
+          "id": "kids-fried-rice-combo",
+          "odooProductId": 73,
+          "title": "Combo",
+          "price": 14.9
+        }
+      ],
+      "options": {
+        "egg": [
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
+          },
+          {
+            "id": "egg-no",
+            "title": "No Fried Egg",
+            "price": 0
+          }
+        ]
+      }
     },
     {
       "id": "kids-nuggets",
       "title": "Chicken Nuggets with Fries",
+      "odooProductId": 31,
       "category": "Kids",
       "price": 7.9,
-      "description": "Crispy nuggets served with fries — kids favourite.",
+      "description": "Crispy nuggets served with fries \u2014 kids favourite.",
       "image": "/images/items/chicken-nuggets-fries.jpg"
     },
-{
+    {
+      "id": "kuih-corner",
+      "title": "Kuih Corner",
+      "odooProductId": 0,
+      "category": "Dessert",
+      "price": 6.0,
+      "description": "Traditional Malaysian kuih.",
+      "image": "/images/items/placeholder.jpg"
+    },
+    {
       "id": "addon-fried-egg",
       "title": "Fried Egg",
+      "odooProductId": 55,
       "category": "Add-ons",
       "price": 2.0,
-      "description": "Crispy edge,soft centre - perfect on any rice or noodle dish.",
+      "description": "Crispy edge, soft centre - perfect on any rice or noodle dish.",
       "image": "/images/items/fried-egg.jpg"
     },
     {
-      "id": "addon-ayam-goreng-berempah-maryland",
+      "id": "addon-ayam-goreng",
       "title": "Ayam Goreng Berempah-Maryland piece",
+      "odooProductId": 54,
       "category": "Add-ons",
-      "price": 8.90,
-      "description": "Malaysian spiced fried chicken",
+      "price": 10.9,
+      "description": "Malaysian spiced fried chicken.",
       "image": "/images/items/ayam-addon.jpg"
     },
     {
       "id": "addon-beef-rendang",
       "title": "Beef Rendang",
+      "odooProductId": 59,
       "category": "Add-ons",
-      "price": 10.90,
+      "price": 10.9,
       "description": "Slow-cooked beef in rich rendang spices.",
       "image": "/images/items/beef-rendang.jpg"
     },
     {
       "id": "addon-coconut-rice",
       "title": "Coconut Rice",
+      "odooProductId": 56,
       "category": "Add-ons",
-      "price": 4.5,
+      "price": 5.5,
       "description": "Fragrant coconut milk rice with pandan notes.",
       "image": "/images/items/coconut-rice.jpg"
     },
     {
       "id": "addon-jasmine-rice",
       "title": "Jasmine Rice",
+      "odooProductId": 57,
       "category": "Add-ons",
-      "price": 3.5,
+      "price": 4.5,
       "description": "Light, fragrant steamed jasmine rice.",
       "image": "/images/items/jasmine-rice.jpg"
     },
     {
       "id": "addon-sambal",
       "title": "Sambal Sauce",
+      "odooProductId": 58,
       "category": "Add-ons",
       "price": 3.0,
-      "description": "Spicy, tangy homemade sambal — rich chilli flavour.",
+      "description": "Spicy, tangy homemade sambal \u2014 rich chilli flavour.",
       "image": "/images/items/sambal-sauce.jpg"
     },
-
+    {
+      "id": "addon-chicken",
+      "title": "Chicken (Add-on)",
+      "odooProductId": 60,
+      "category": "Add-ons",
+      "price": 2.0,
+      "description": "Add chicken to any dish.",
+      "image": "/images/items/placeholder.jpg"
+    },
+    {
+      "id": "addon-seafood",
+      "title": "Seafood (Add-on)",
+      "odooProductId": 63,
+      "category": "Add-ons",
+      "price": 2.0,
+      "description": "Add seafood to any dish.",
+      "image": "/images/items/placeholder.jpg"
+    },
+    {
+      "id": "addon-veggies",
+      "title": "Veggies (Add-on)",
+      "odooProductId": 62,
+      "category": "Add-ons",
+      "price": 2.0,
+      "description": "Add extra vegetables to any dish.",
+      "image": "/images/items/veggies.jpg"
+    },
     {
       "id": "drink-teh-tarik-hot",
-      "title": "Teh Tarik (Hot)",
+      "title": "Teh Tarik",
+      "odooProductId": 36,
       "category": "Signature Malaysian Drinks",
-      "price": 4.5,
-      "description": "Malaysia’s iconic pulled milk tea — smooth, creamy and frothy.",
+      "price": 5.9,
+      "description": "Malaysia's iconic pulled milk tea \u2014 smooth, creamy and frothy.",
       "image": "/images/items/teh-tarik-hot.jpg"
     },
     {
-      "id": "drink-teh-tarik-cold",
-      "title": "Teh Tarik (Cold)",
+      "id": "drink-teh-ais",
+      "title": "Teh Ais",
+      "odooProductId": 0,
       "category": "Signature Malaysian Drinks",
-      "price": 5.0,
-      "description": "Chilled version of the famous pulled tea — refreshing and creamy.",
+      "price": 6.9,
+      "description": "Chilled Malaysian milk tea served over ice.",
       "image": "/images/items/teh-tarik.jpg"
+    },
+    {
+      "id": "drink-teh-o-ais",
+      "title": "Teh O Ais",
+      "odooProductId": 0,
+      "category": "Signature Malaysian Drinks",
+      "price": 5.9,
+      "description": "Chilled black tea with sugar served over ice.",
+      "image": "/images/items/teh-tarik.jpg"
+    },
+    {
+      "id": "drink-teh-o-limau",
+      "title": "Teh O Limau",
+      "odooProductId": 0,
+      "category": "Signature Malaysian Drinks",
+      "price": 6.9,
+      "description": "Black tea with lime served over ice.",
+      "image": "/images/items/teh-tarik.jpg"
+    },
+    {
+      "id": "drink-kopi-c-ais",
+      "title": "Kopi C Ais",
+      "odooProductId": 0,
+      "category": "Signature Malaysian Drinks",
+      "price": 6.9,
+      "description": "Malaysian iced coffee with evaporated milk.",
+      "image": "/images/items/placeholder.jpg"
+    },
+    {
+      "id": "drink-kopi-c-hot",
+      "title": "Kopi C Hot",
+      "odooProductId": 0,
+      "category": "Signature Malaysian Drinks",
+      "price": 5.9,
+      "description": "Malaysian hot coffee with evaporated milk.",
+      "image": "/images/items/placeholder.jpg"
     },
     {
       "id": "drink-sirap-ais",
       "title": "Sirap Ais",
+      "odooProductId": 33,
+      "category": "Signature Malaysian Drinks",
+      "price": 5.9,
+      "description": "Vibrant pink, rose flavoured drink served with ice.",
+      "image": "/images/items/sirap-ais.jpg"
+    },
+    {
+      "id": "drink-sirap-limau-ais",
+      "title": "Sirap Limau Ais",
+      "odooProductId": 0,
+      "category": "Signature Malaysian Drinks",
+      "price": 6.9,
+      "description": "Rose syrup with lime served over ice.",
+      "image": "/images/items/sirap-ais.jpg"
+    },
+    {
+      "id": "drink-limau-ais",
+      "title": "Limau Ais",
+      "odooProductId": 0,
       "category": "Signature Malaysian Drinks",
       "price": 5.5,
-      "description": "Vibrant pink, rose falvoured drink served with ice.",
-      "image": "/images/items/sirap-ais.jpg"
+      "description": "Fresh lime juice served over ice.",
+      "image": "/images/items/placeholder.jpg"
     },
     {
       "id": "drink-bandung-ais",
       "title": "Bandung Ais",
+      "odooProductId": 34,
       "category": "Signature Malaysian Drinks",
-      "price": 6.5,
-      "description": "A beautiful pink drink made from rose syrup and creamy milk served over milk.",
+      "price": 6.9,
+      "description": "A beautiful pink drink made from rose syrup and creamy milk served over ice.",
       "image": "/images/items/bandung-ais.jpg"
     },
     {
       "id": "drink-milo-ais",
       "title": "Milo Ais",
+      "odooProductId": 35,
       "category": "Signature Malaysian Drinks",
       "price": 6.5,
       "description": "A refreshing Malaysian chocolate malt drink, served cold.",
       "image": "/images/items/milo-ais.jpg"
     },
     {
+      "id": "drink-milo-panas",
+      "title": "Milo Panas",
+      "odooProductId": 0,
+      "category": "Signature Malaysian Drinks",
+      "price": 5.9,
+      "description": "Hot Malaysian chocolate malt drink.",
+      "image": "/images/items/milo-ais.jpg"
+    },
+    {
+      "id": "drink-milo-dino",
+      "title": "Milo Dino",
+      "odooProductId": 0,
+      "category": "Signature Malaysian Drinks",
+      "price": 7.9,
+      "description": "Milo with extra Milo powder on top.",
+      "image": "/images/items/milo-ais.jpg"
+    },
+    {
+      "id": "drink-karak-chai",
+      "title": "Indian Karak Chai",
+      "odooProductId": 0,
+      "category": "Signature Malaysian Drinks",
+      "price": 3.9,
+      "description": "Aromatic spiced Indian milk tea.",
+      "image": "/images/items/karak-chai.jpg"
+    },
+    {
+      "id": "drink-thai-milk-tea",
+      "title": "Thai Milk Tea",
+      "odooProductId": 0,
+      "category": "Signature Malaysian Drinks",
+      "price": 5.9,
+      "description": "Creamy Thai iced milk tea.",
+      "image": "/images/items/placeholder.jpg"
+    },
+    {
+      "id": "drink-nescafe-ais",
+      "title": "Nescafe Ais",
+      "odooProductId": 0,
+      "category": "Signature Malaysian Drinks",
+      "price": 6.9,
+      "description": "Chilled Nescafe served over ice.",
+      "image": "/images/items/placeholder.jpg"
+    },
+    {
+      "id": "drink-nescafe-hot",
+      "title": "Nescafe Hot",
+      "odooProductId": 0,
+      "category": "Signature Malaysian Drinks",
+      "price": 5.9,
+      "description": "Hot Nescafe coffee.",
+      "image": "/images/items/placeholder.jpg"
+    },
+    {
       "id": "soft-coke",
       "title": "Coke Regular",
+      "odooProductId": 40,
       "category": "Soft Drinks",
       "price": 4.0,
       "image": "/images/items/coke-reg.jpg"
@@ -357,19 +860,23 @@
     {
       "id": "soft-coke-zero",
       "title": "Coke No Sugar",
+      "odooProductId": 41,
       "category": "Soft Drinks",
       "price": 4.0,
       "image": "/images/items/coke-nosugar.jpg"
     },
     {
       "id": "soft-sprite",
-      "title": "Sprite",
+      "title": "Sprite Regular",
+      "odooProductId": 42,
       "category": "Soft Drinks",
       "price": 4.0,
       "image": "/images/items/sprite.jpg"
-    },{
+    },
+    {
       "id": "soft-fanta",
       "title": "Fanta",
+      "odooProductId": 43,
       "category": "Soft Drinks",
       "price": 4.0,
       "image": "/images/items/fanta.jpg"
@@ -377,16 +884,16 @@
     {
       "id": "soft-soya",
       "title": "Soya Bean",
+      "odooProductId": 44,
       "category": "Soft Drinks",
       "price": 4.5,
       "description": "Creamy soya bean drink.",
       "image": "/images/items/soya-bean.jpg"
     },
-    
-
     {
       "id": "dessert-ice-kacang",
       "title": "Ice Kacang",
+      "odooProductId": 38,
       "category": "Dessert",
       "price": 10.9,
       "image": "/images/items/ice-kacang.jpg"
@@ -394,8 +901,9 @@
     {
       "id": "dessert-buko-pandan",
       "title": "Buko Pandan",
+      "odooProductId": 39,
       "category": "Dessert",
-      "price": 10.9,
+      "price": 12.9,
       "image": "/images/items/buko-pandan.jpg"
     }
   ]

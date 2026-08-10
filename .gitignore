@@ -137,3 +137,7 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Runtime holiday-surcharge state (persisted flag)
+backend/holiday-state.json
+SEDAP_HANDOFF.md
