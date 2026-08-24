@@ -6,7 +6,7 @@ import BananaLeafModal from "../components/BananaLeafModal";
 import VariantModal from "../components/VariantModal";
 import { useCart } from "../lib/cartContext";
 import { API_URL, productImageUrl } from "../lib/api";
-import { isClosedToday, CLOSED_DAYS_LABEL, OPEN_DAYS_LABEL } from "../lib/hours";
+import { isClosedToday, CLOSED_DAYS_LABEL, OPEN_DAYS_LABEL, TESTING_MODE } from "../lib/hours";
 import staticMenuData from "../../config/menuConfig.json";
 import styles from "../styles/menu.module.css";
 
@@ -153,7 +153,7 @@ function isInternalItem(name: string): boolean {
         exposed to the browser.
      3. Placeholder (also used via <img onError> if the image 404s).
 ========================= */
-const PLACEHOLDER_IMG = "/images/items/placeholder.jpg";
+const PLACEHOLDER_IMG = "/images/items/placeholder.png";
 
 const MENU_CACHE_KEY = "sedap_menu_cache";
 
@@ -377,6 +377,7 @@ const RESTAURANT_TZ =
   "Australia/Adelaide";
 
 function isWeekend(): boolean {
+  if (TESTING_MODE) return true;   // testing: treat every day as weekend so weekend-only items are orderable
   const weekday = new Intl.DateTimeFormat("en-US", {
     timeZone: RESTAURANT_TZ,
     weekday: "short",
@@ -599,7 +600,9 @@ export default function MenuPage() {
                 item.id === "banana-leaf-set-veg";
               const isWeekendOnly = WEEKEND_ONLY_ITEMS.has(item.id) ||
                 (item.title ?? "").toLowerCase().includes("add on") ||
-                (item.title ?? "").toLowerCase().includes("add-on");
+                (item.title ?? "").toLowerCase().includes("add-on") ||
+                (item.title ?? "").toLowerCase().includes("banana leaf");
+              const isBananaLeafBase = (item.title ?? "").toLowerCase().includes("banana leaf");
               const weekendAvailable = !isWeekendOnly || isWeekend();
               const needsBananaLeaf  = REQUIRES_BANANA_LEAF(item);
               const bananaInCart     = needsBananaLeaf && hasBananaLeafInCart(items);
@@ -631,6 +634,11 @@ export default function MenuPage() {
                     <div>
                       <h3>{item.title}</h3>
                       {item.description && <p>{item.description}</p>}
+                      {isBananaLeafBase && (
+                        <p style={{ fontSize: 12, color: "#FFD042", marginTop: 2, fontWeight: 600 }}>
+                          🌶️ Add a protein from “Add On (Extra)” below
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -698,6 +706,11 @@ export default function MenuPage() {
                     )}
 
                     {!VIEW_ONLY_MENU && !isBanana && !hasOptions && canOrder && (
+                      !weekendAvailable ? (
+                        <div style={{ fontSize: 11, color: "#FFD042", fontWeight: 600, textAlign: "center", opacity: 0.85, marginTop: 4 }}>
+                          🗓️ Weekend only
+                        </div>
+                      ) : (
                       <div className={styles.qtyWrap}>
                         {qty === 0 ? (
                           <button
@@ -732,6 +745,7 @@ export default function MenuPage() {
                           </>
                         )}
                       </div>
+                      )
                     )}
                   </div>
                 </div>
