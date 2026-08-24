@@ -7,10 +7,14 @@
 // midnight.
 // =====================================================
 
+// ⚠️ TESTING SWITCH. While true, EVERY day is treated as open AND all
+// weekend-only items are orderable — so the site can be fully tested any day.
+// SET TO false BEFORE REAL LAUNCH so the closed-days + weekend rules below apply.
+export const TESTING_MODE = true;
+
 // Weekday numbers the restaurant is CLOSED. 0=Sun,1=Mon,2=Tue,…,6=Sat.
 // Sedap is closed Mondays & Tuesdays.
-// ⚠️ TEMPORARILY OPEN ALL DAYS FOR TESTING — restore to [1, 2] (Mon & Tue) before real launch.
-export const CLOSED_WEEKDAYS: number[] = [];
+export const CLOSED_WEEKDAYS = [1, 2];
 
 const TZ =
   (typeof process !== "undefined" && process.env.NEXT_PUBLIC_TIMEZONE) ||
@@ -31,6 +35,7 @@ export function restaurantWeekday(d: Date = new Date()): number {
 
 // Is the restaurant closed on the given day (default: now)?
 export function isClosedToday(d: Date = new Date()): boolean {
+  if (TESTING_MODE) return false;            // testing: never closed
   return CLOSED_WEEKDAYS.includes(restaurantWeekday(d));
 }
 
