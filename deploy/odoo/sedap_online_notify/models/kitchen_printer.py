@@ -40,7 +40,10 @@ def _order_header(order):
         header.append(order.partner_id.name)
     if order.preset_time:
         try:
-            local = fields.Datetime.context_timestamp(order, order.preset_time)
+            # Force the shop timezone so the printed pickup time always matches
+            # the POS, regardless of the API user's personal timezone setting.
+            rec = order.with_context(tz="Australia/Adelaide")
+            local = fields.Datetime.context_timestamp(rec, order.preset_time)
             header.append("Pickup: %s" % local.strftime("%a %d %b %H:%M"))
         except Exception:
             header.append("Pickup: %s" % order.preset_time)
