@@ -35,6 +35,15 @@ jobs:
 
       - name: Build Next.js
         working-directory: frontend
+        # NEXT_PUBLIC_* values are inlined at build time. Set these in the repo:
+        #   Settings → Secrets and variables → Actions
+        #   Variables: NEXT_PUBLIC_API_URL (e.g. https://order.sedapeatery.com.au),
+        #              NEXT_PUBLIC_TIMEZONE (Australia/Adelaide)
+        #   Secret:    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY (pk_live_… at go-live)
+        env:
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_TIMEZONE: ${{ vars.NEXT_PUBLIC_TIMEZONE }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
         run: npm run build
 
       - name: Upload GitHub Pages artifact

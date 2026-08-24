@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useCart } from "../lib/cartContext";
+import { API_URL } from "../lib/api";
 import Link from "next/link";
-
 
 export default function CartDrawer() {
   const {
@@ -12,7 +12,19 @@ export default function CartDrawer() {
     clearCart,
   } = useCart();
 
-  const total = items.reduce(
+  const [holidayActive, setHolidayActive] = useState(false);
+
+  // Surface (display-only) whether the public-holiday surcharge is on, so the
+  // customer sees it will be added before they reach checkout.
+  useEffect(() => {
+    if (!isCartOpen) return;
+    fetch(`${API_URL}/api/holiday/status`)
+      .then((r) => r.json())
+      .then((d) => setHolidayActive(!!d.active))
+      .catch(() => {});
+  }, [isCartOpen]);
+
+  const subtotal = items.reduce(
     (sum, i) => sum + i.price * i.qty,
     0
   );
@@ -32,14 +44,16 @@ export default function CartDrawer() {
         </header>
 
         {items.length === 0 ? (
-          <p className="cart-empty">Your cart is empty</p>
+          <p className="cart-empty"> Your cart is empty</p>
         ) : (
           <>
             <div className="cart-items">
               {items.map((i) => (
                 <div key={i.id} className="cart-item">
                   <div>
-                    <strong>{i.title}</strong>
+                    {/* ✅ SHOW VARIANT-AWARE NAME */}
+                    <strong>{i.name ?? i.title}</strong>
+
                     <div className="cart-price">
                       ${(i.price * i.qty).toFixed(2)}
                     </div>
@@ -60,10 +74,15 @@ export default function CartDrawer() {
 
             <footer className="cart-footer">
               <div className="cart-total">
-                Total: ${total.toFixed(2)}
+                Subtotal: ${subtotal.toFixed(2)}
               </div>
+              {holidayActive && (
+                <div style={{ fontSize: 12, color: "#c0392b", marginTop: 4 }}>
+                  +10% public holiday surcharge applied at checkout
+                </div>
+              )}
 
-              <Link href="/cart" onClick={closeCart}>
+              <Link href="/checkout" onClick={closeCart}>
                 <button className="checkout-btn">
                   Checkout
                 </button>

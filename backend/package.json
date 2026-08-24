@@ -1,0 +1,17 @@
+{
+  "name": "restaurant-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node test/slots.test.mjs",
+    "test:order": "node test/test-order.mjs"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.22.1",
+    "stripe": "^20.1.0"
+  }
+}
