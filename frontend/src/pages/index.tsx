@@ -146,7 +146,7 @@ export default function HomePage() {
           <div className="footer-info">
   Powered by{" "}
   <a
-    href="https://dispatch.genzonix.com/"
+    href="https://teamcooptech.com/"
     target="_blank"
     rel="noreferrer"
     className="footer-link"
