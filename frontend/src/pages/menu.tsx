@@ -83,10 +83,14 @@ const SKIP_EXACT = new Set([
    Add entries here whenever a new Odoo product should go
    into a specific category instead of "New Items".        */
 const ODOO_CATEGORY_MAP: { keyword: string; category: string }[] = [
-  // Banana Leaf
-  { keyword: "banana leaf",   category: "Banana Leaf Weekend Special" },
-  { keyword: "add on",        category: "Banana Leaf Weekend Lunch Special" },
-  { keyword: "add-on",        category: "Banana Leaf Weekend Lunch Special" },
+  // Banana Leaf — the Set and its protein add-on share ONE heading.
+  // NOTE: "add on (extra)" must be listed before the generic "add on"/"add-on"
+  // keywords, since the first matching keyword wins.
+  { keyword: "banana leaf",     category: "Saturday Lunch Special" },
+  { keyword: "add on (extra)",  category: "Saturday Lunch Special" },
+  // Generic dish add-ons belong with the other add-ons, not the Banana Leaf set.
+  { keyword: "add-on",          category: "Add-ons" },
+  { keyword: "add on",          category: "Add-ons" },
   // Rice
   { keyword: "nasi lemak",    category: "Nasi Lemak" },
   { keyword: "nasi",          category: "Rice Meals" },
@@ -363,8 +367,7 @@ const CATEGORY_ORDER = [
   "Rice Meals",
   "Nasi Lemak",
   "Noodles",
-  "Banana Leaf Weekend Special",
-  "Banana Leaf Weekend Lunch Special",
+  "Saturday Lunch Special",
   "Add-ons",
   "Kids",
   "Signature Malaysian Drinks",
