@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useCart } from "../lib/cartContext";
 import { API_URL } from "../lib/api";
-import { isClosedToday, CLOSED_DAYS_LABEL } from "../lib/hours";
+import { isOpenNow, HOURS_SUMMARY } from "../lib/hours";
 import Header from "../components/Header";
 
 interface TimeSlot {
@@ -22,9 +22,14 @@ export default function CheckoutPage() {
   const [slotsLoading, setSlotsLoading] = useState(true);
   const [loading,          setLoading]         = useState(false);
   const [holidayActive,    setHolidayActive]   = useState(false);
-  // Closed Mon & Tue — computed client-side after mount (restaurant TZ).
-  const [closedToday,      setClosedToday]     = useState(false);
-  useEffect(() => { setClosedToday(isClosedToday()); }, []);
+  // Whether we're in a trading session right now (restaurant TZ), refreshed each minute.
+  const [openNow, setOpenNow] = useState(true);
+  useEffect(() => {
+    const t = () => setOpenNow(isOpenNow());
+    t();
+    const id = setInterval(t, 60_000);
+    return () => clearInterval(id);
+  }, []);
 
   // Server-computed price breakdown — the frontend never computes amounts.
   const [quote, setQuote] = useState<{
@@ -83,14 +88,14 @@ export default function CheckoutPage() {
   }, []);
 
   const isFormValid =
-    !closedToday &&
+    openNow &&
     name.trim().length > 0 &&
     phone.trim().length > 0 &&
     pickupSlot !== null &&
     items.length > 0;
 
   const handleProceedToPayment = async () => {
-    if (closedToday) return;
+    if (!openNow) return;
     if (!isFormValid || loading) return;
     setLoading(true);
 
@@ -132,14 +137,14 @@ export default function CheckoutPage() {
         <div style={{ maxWidth: 560, margin: "0 auto", background: "#7A3320", borderRadius: 14, padding: 22 }}>
           <h1 style={{ marginBottom: 18 }}>Checkout</h1>
 
-          {closedToday && (
+          {!openNow && (
             <div style={{
               background: "#c0392b", color: "#fff", borderRadius: 10,
               padding: "12px 16px", marginBottom: 18, fontWeight: 600,
               display: "flex", alignItems: "center", gap: 10, fontSize: 14,
             }}>
               <span>🔒</span>
-              <span>We're closed today — {CLOSED_DAYS_LABEL}. Orders can't be placed right now; please order again from Wednesday.</span>
+              <span>We're closed right now. Hours — {HOURS_SUMMARY}.</span>
             </div>
           )}
 

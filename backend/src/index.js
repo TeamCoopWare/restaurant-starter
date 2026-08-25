@@ -6,7 +6,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { randomUUID } from "crypto";
-import { generateSlots } from "./slots.js";
+import { generateSlots, generateSessionSlots } from "./slots.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -434,10 +434,9 @@ app.get("/api/timeslots", (req, res) => {
     // pickup slots are always available regardless of the current time.
     // Remove it (or set to 0) for real launch.
     const allDay = process.env.SLOTS_ALLDAY === "1";
-    res.json(generateSlots(new Date(), TIMEZONE, {
+    res.json(generateSessionSlots(new Date(), TIMEZONE, {
       slotsAhead: SLOTS_AHEAD,
-      nextDay: allDay,
-      ...(allDay ? { openMins: 0, closeMins: 24 * 60 } : {}),
+      allDay,
     }));
   } catch (err) {
     res.status(500).json({ error: err.message });
