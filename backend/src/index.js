@@ -6,7 +6,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { randomUUID } from "crypto";
-import { generateSlots } from "./slots.js";
+import { generateSlots, generateSessionSlots } from "./slots.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -430,7 +430,14 @@ app.get("/api/product-image/:templateId", async (req, res) => {
 app.get("/api/timeslots", (req, res) => {
   try {
     // Near-term only: the next few slots today, no next-day fill.
-    res.json(generateSlots(new Date(), TIMEZONE, { slotsAhead: SLOTS_AHEAD, nextDay: false }));
+    // SLOTS_ALLDAY=1 (TESTING) removes the 10am–9pm opening-hours window so
+    // pickup slots are always available regardless of the current time.
+    // Remove it (or set to 0) for real launch.
+    const allDay = process.env.SLOTS_ALLDAY === "1";
+    res.json(generateSessionSlots(new Date(), TIMEZONE, {
+      slotsAhead: SLOTS_AHEAD,
+      allDay,
+    }));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

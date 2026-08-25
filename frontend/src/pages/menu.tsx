@@ -6,7 +6,7 @@ import BananaLeafModal from "../components/BananaLeafModal";
 import VariantModal from "../components/VariantModal";
 import { useCart } from "../lib/cartContext";
 import { API_URL, productImageUrl } from "../lib/api";
-import { isClosedToday, CLOSED_DAYS_LABEL, OPEN_DAYS_LABEL, TESTING_MODE } from "../lib/hours";
+import { currentMenuMode, isBananaLeafItem, HOURS_SUMMARY, type MenuMode } from "../lib/hours";
 import staticMenuData from "../../config/menuConfig.json";
 import styles from "../styles/menu.module.css";
 
@@ -154,6 +154,13 @@ function isInternalItem(name: string): boolean {
      3. Placeholder (also used via <img onError> if the image 404s).
 ========================= */
 const PLACEHOLDER_IMG = "/images/items/placeholder.png";
+
+// Descriptions for the generic dish add-ons (items named exactly Chicken/Seafood/Veggies).
+const ADDON_DESCRIPTIONS: Record<string, string> = {
+  chicken: "add extra to your dish",
+  seafood: "add extra to your dish",
+  veggies: "add extra to your dish",
+};
 
 const MENU_CACHE_KEY = "sedap_menu_cache";
 
@@ -366,30 +373,6 @@ const CATEGORY_ORDER = [
   "New Items", // auto-populated from new Odoo products
 ];
 
-/* =========================
-   WEEKEND CHECK
-   Banana Leaf is only available Sat & Sun — evaluated in the restaurant's
-   timezone (NEXT_PUBLIC_TIMEZONE, default Australia/Adelaide), not the
-   visitor's local zone, so it flips at the right moment for everyone.
-========================= */
-const RESTAURANT_TZ =
-  (typeof process !== "undefined" && process.env.NEXT_PUBLIC_TIMEZONE) ||
-  "Australia/Adelaide";
-
-function isWeekend(): boolean {
-  if (TESTING_MODE) return true;   // testing: treat every day as weekend so weekend-only items are orderable
-  const weekday = new Intl.DateTimeFormat("en-US", {
-    timeZone: RESTAURANT_TZ,
-    weekday: "short",
-  }).format(new Date());
-  return weekday === "Sat" || weekday === "Sun";
-}
-
-const WEEKEND_ONLY_ITEMS = new Set([
-  "banana-leaf-set-veg",
-  "banana-leaf-set",
-]);
-
 // These items require a Banana Leaf Set to be in the cart first
 const REQUIRES_BANANA_LEAF = (item: any): boolean => {
   const title = (item.title ?? "").toLowerCase();
@@ -415,12 +398,17 @@ export default function MenuPage() {
   const { addItem, updateQty, items } = useCart();
   const [posOpen,      setPosOpen]      = useState<boolean>(true);
   const [holidayActive, setHolidayActive] = useState<boolean>(false);
-  // Closed on Mon & Tue. Computed client-side (in the restaurant TZ) after mount
-  // to avoid a static-export/hydration mismatch on the build-time day.
-  const [closedToday,  setClosedToday]  = useState<boolean>(false);
+  // Current trading session's menu mode: "full" (whole menu, no Banana Leaf),
+  // "banana" (Banana Leaf only — Sat lunch), or null (closed). Computed
+  // client-side after mount (restaurant TZ) to avoid a hydration mismatch, and
+  // refreshed each minute so it flips at session boundaries without a reload.
+  const [menuMode, setMenuMode] = useState<MenuMode | null>(null);
 
   useEffect(() => {
-    setClosedToday(isClosedToday());
+    const tick = () => setMenuMode(currentMenuMode());
+    tick();
+    const id = setInterval(tick, 60_000);
+    return () => clearInterval(id);
   }, []);
 
   useEffect(() => {
@@ -514,7 +502,15 @@ export default function MenuPage() {
       });
   }, []);
 
-  const categories = menuItems.reduce<Record<string, MenuItem[]>>((acc, it) => {
+  // Show items for the current session: "banana" → only Banana Leaf items;
+  // otherwise (full session OR closed-browse) → everything EXCEPT Banana Leaf.
+  const showMode: "full" | "banana" = menuMode === "banana" ? "banana" : "full";
+  const visibleItems = menuItems.filter((it) => {
+    const banana = isBananaLeafItem(it.title);
+    return showMode === "banana" ? banana : !banana;
+  });
+
+  const categories = visibleItems.reduce<Record<string, MenuItem[]>>((acc, it) => {
     const cat = it.category ?? "Uncategorized";
     acc[cat] = acc[cat] || [];
     acc[cat].push(it);
@@ -530,9 +526,10 @@ export default function MenuPage() {
     items.find((i: any) => i.id === id)?.qty ?? 0;
 
   // Static fallback is a read-only display — ordering is disabled there.
-  // Ordering is also disabled on closed days (Mon & Tue).
+  // Ordering is also disabled when closed (outside trading sessions).
   const readOnly = menuSource === "static";
-  const canOrder = posOpen && !readOnly && !closedToday;
+  const isOpen = menuMode !== null;
+  const canOrder = posOpen && !readOnly && isOpen;
 
   return (
     <>
@@ -544,31 +541,40 @@ export default function MenuPage() {
         <div style={{ height: "80px" }} />
         <h1 className={styles.menuTitle}>Full Menu</h1>
 
-        {/* Always-visible trading hours */}
+        {/* Trading hours */}
         <p style={{ fontSize: 13, opacity: 0.7, marginBottom: 12 }}>
-          🕒 {OPEN_DAYS_LABEL} · {CLOSED_DAYS_LABEL}
+          🕒 {HOURS_SUMMARY}
         </p>
 
-        {/* Closed today (Mon & Tue) — takes precedence over the generic notice */}
-        {closedToday ? (
+        {/* Session status */}
+        {!isOpen ? (
           <div style={{
             background: "#c0392b", color: "#fff", borderRadius: 10,
             padding: "12px 18px", marginBottom: 18, fontWeight: 600,
             display: "flex", alignItems: "center", gap: 10, fontSize: 15,
           }}>
             <span>🔒</span>
-            <span>We're closed today — Sedap is closed Mondays &amp; Tuesdays. Browse the menu and order again from Wednesday!</span>
+            <span>We're closed right now. Browse the menu and order during our opening hours.</span>
           </div>
-        ) : !posOpen && (
+        ) : menuMode === "banana" ? (
+          <div style={{
+            background: "rgba(76,175,80,0.15)", border: "2px solid #4caf50",
+            color: "#fff", borderRadius: 10, padding: "12px 18px", marginBottom: 18,
+            display: "flex", alignItems: "center", gap: 10, fontSize: 14, fontWeight: 600,
+          }}>
+            <span>🍃</span>
+            <span>Saturday Lunch — Banana Leaf Set only (11am–2:30pm). The full menu returns for Saturday dinner.</span>
+          </div>
+        ) : !posOpen ? (
           <div style={{
             background: "#c0392b", color: "#fff", borderRadius: 10,
             padding: "12px 18px", marginBottom: 18, fontWeight: 600,
             display: "flex", alignItems: "center", gap: 10, fontSize: 15,
           }}>
             <span>🔒</span>
-            <span>Online ordering is currently closed. Browse our menu and come back during opening hours!</span>
+            <span>Online ordering is currently closed. Browse our menu and come back soon!</span>
           </div>
-        )}
+        ) : null}
 
         {holidayActive && (
           <div style={{
@@ -598,20 +604,21 @@ export default function MenuPage() {
               const isBanana =
                 item.id === "banana-leaf-set" ||
                 item.id === "banana-leaf-set-veg";
-              const isWeekendOnly = WEEKEND_ONLY_ITEMS.has(item.id) ||
-                (item.title ?? "").toLowerCase().includes("add on") ||
-                (item.title ?? "").toLowerCase().includes("add-on") ||
-                (item.title ?? "").toLowerCase().includes("banana leaf");
-              const isBananaLeafBase = (item.title ?? "").toLowerCase().includes("banana leaf");
-              const weekendAvailable = !isWeekendOnly || isWeekend();
               const needsBananaLeaf  = REQUIRES_BANANA_LEAF(item);
               const bananaInCart     = needsBananaLeaf && hasBananaLeafInCart(items);
+              // The Banana Leaf SET (not its "Add On (Extra)" proteins) gets the hint.
+              const isBananaLeafBase = isBananaLeafItem(item.title) && !needsBananaLeaf;
 
               const hasOptions =
                 (item.variants && item.variants.length > 0) ||
                 item.options?.egg ||
                 item.options?.spice ||
                 item.options?.rice;
+
+              const desc =
+                item.description ||
+                ADDON_DESCRIPTIONS[(item.title ?? "").trim().toLowerCase()] ||
+                "";
 
               const qty = getQty(item.id);
 
@@ -633,7 +640,7 @@ export default function MenuPage() {
                     />
                     <div>
                       <h3>{item.title}</h3>
-                      {item.description && <p>{item.description}</p>}
+                      {desc && <p>{desc}</p>}
                       {isBananaLeafBase && (
                         <p style={{ fontSize: 12, color: "#FFD042", marginTop: 2, fontWeight: 600 }}>
                           🌶️ Add a protein from “Add On (Extra)” below
@@ -650,67 +657,31 @@ export default function MenuPage() {
                       </div>
                     )}
 
-                    {isBanana && (
-                      weekendAvailable && canOrder ? (
-                        <button
-                          className={styles.addBtn}
-                          onClick={() => {
-                            setBananaBase(item);
-                            setBlOpen(true);
-                          }}
-                        >
-                          Customize
-                        </button>
-                      ) : isWeekendOnly && !weekendAvailable ? (
-                        <div style={{
-                          fontSize: 11, color: "#FFD042", fontWeight: 600,
-                          textAlign: "center", opacity: 0.85, marginTop: 4,
-                        }}>
-                          🗓️ Weekend only
-                        </div>
-                      ) : null
+                    {isBanana && canOrder && (
+                      <button
+                        className={styles.addBtn}
+                        onClick={() => { setBananaBase(item); setBlOpen(true); }}
+                      >
+                        Customize
+                      </button>
                     )}
 
                     {!isBanana && hasOptions && canOrder && (
-                      needsBananaLeaf ? (
-                        !weekendAvailable ? (
-                          <div style={{ fontSize: 11, color: "#FFD042", fontWeight: 600, textAlign: "center", opacity: 0.85, marginTop: 4 }}>
-                            🗓️ Weekend only
-                          </div>
-                        ) : !bananaInCart ? (
-                          <div style={{ fontSize: 11, color: "#FFD042", fontWeight: 600, textAlign: "center", opacity: 0.85, marginTop: 4 }}>
-                            🍃 Add Banana Leaf Set first
-                          </div>
-                        ) : (
-                          <button
-                            className={styles.addBtn}
-                            onClick={() => { setSelectedItem(item); setVariantOpen(true); }}
-                          >
-                            Options
-                          </button>
-                        )
+                      needsBananaLeaf && !bananaInCart ? (
+                        <div style={{ fontSize: 11, color: "#FFD042", fontWeight: 600, textAlign: "center", opacity: 0.85, marginTop: 4 }}>
+                          🍃 Add Banana Leaf Set first
+                        </div>
                       ) : (
-                        !weekendAvailable ? (
-                          <div style={{ fontSize: 11, color: "#FFD042", fontWeight: 600, textAlign: "center", opacity: 0.85, marginTop: 4 }}>
-                            🗓️ Weekend only
-                          </div>
-                        ) : (
-                          <button
-                            className={styles.addBtn}
-                            onClick={() => { setSelectedItem(item); setVariantOpen(true); }}
-                          >
-                            Options
-                          </button>
-                        )
+                        <button
+                          className={styles.addBtn}
+                          onClick={() => { setSelectedItem(item); setVariantOpen(true); }}
+                        >
+                          Options
+                        </button>
                       )
                     )}
 
                     {!VIEW_ONLY_MENU && !isBanana && !hasOptions && canOrder && (
-                      !weekendAvailable ? (
-                        <div style={{ fontSize: 11, color: "#FFD042", fontWeight: 600, textAlign: "center", opacity: 0.85, marginTop: 4 }}>
-                          🗓️ Weekend only
-                        </div>
-                      ) : (
                       <div className={styles.qtyWrap}>
                         {qty === 0 ? (
                           <button
@@ -745,7 +716,6 @@ export default function MenuPage() {
                           </>
                         )}
                       </div>
-                      )
                     )}
                   </div>
                 </div>

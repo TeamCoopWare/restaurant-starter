@@ -90,3 +90,52 @@ export function generateSlots(now, timeZone, {
 
   return { slots, interval };
 }
+
+// Trading sessions per weekday (0=Sun … 6=Sat), minutes from midnight (restaurant TZ).
+// Keep in sync with frontend/src/lib/hours.ts SCHEDULE.
+export const SESSIONS = {
+  0: [{ start: 12 * 60, end: 19 * 60 + 30 }],                                   // Sun 12:00–19:30
+  1: [],                                                                         // Mon closed
+  2: [],                                                                         // Tue closed
+  3: [{ start: 17 * 60, end: 21 * 60 + 30 }],                                   // Wed 17:00–21:30
+  4: [{ start: 17 * 60, end: 21 * 60 + 30 }],                                   // Thu
+  5: [{ start: 17 * 60, end: 21 * 60 + 30 }],                                   // Fri
+  6: [{ start: 11 * 60, end: 14 * 60 + 30 }, { start: 17 * 60, end: 21 * 60 + 30 }], // Sat lunch + dinner
+};
+
+// Near-term pickup slots WITHIN the current trading session only. Returns no
+// slots when closed or between sessions (no pre-open ordering). allDay=true
+// (testing) removes the schedule so slots are always offered.
+export function generateSessionSlots(now, timeZone, { interval = 20, slotsAhead = 12, allDay = false } = {}) {
+  const p = zonedParts(now, timeZone);
+  const minsNow = p.hour * 60 + p.minute;
+  const dow = new Date(Date.UTC(p.year, p.month - 1, p.day)).getUTCDay();
+
+  let window = null;
+  if (allDay) {
+    window = { start: 0, end: 24 * 60 };
+  } else {
+    const sessions = SESSIONS[dow] || [];
+    window = sessions.find((s) => minsNow >= s.start && minsNow < s.end) || null;
+  }
+  if (!window) return { slots: [], interval };
+
+  const makeSlot = (totalMins) => {
+    const h = Math.floor(totalMins / 60);
+    const m = totalMins % 60;
+    const u = new Date(zonedTimeToUtc(p.year, p.month, p.day, h, m, timeZone));
+    const odooDatetime =
+      `${u.getUTCFullYear()}-${pad(u.getUTCMonth() + 1)}-${pad(u.getUTCDate())} ` +
+      `${pad(u.getUTCHours())}:${pad(u.getUTCMinutes())}:00`;
+    const ampm = h < 12 ? "AM" : "PM";
+    const timeLabel = `${(h % 12) || 12}:${pad(m)} ${ampm}`;
+    return { label: `Today ${timeLabel}`, value: odooDatetime, localTime: `${pad(h)}:${pad(m)}`, day: "Today" };
+  };
+
+  const slots = [];
+  const first = Math.ceil((minsNow + interval) / interval) * interval;
+  for (let mm = Math.max(first, window.start); mm < window.end && slots.length < slotsAhead; mm += interval) {
+    slots.push(makeSlot(mm));
+  }
+  return { slots, interval };
+}

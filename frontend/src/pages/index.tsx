@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import Link from "next/link";
-import { CLOSED_DAYS_LABEL, OPEN_DAYS_LABEL } from "../lib/hours";
+import { HOURS_SUMMARY } from "../lib/hours";
 
 export default function HomePage() {
   return (
@@ -35,7 +35,7 @@ export default function HomePage() {
               }}
             >
               <span aria-hidden>🕒</span>
-              <span>{OPEN_DAYS_LABEL} · {CLOSED_DAYS_LABEL}</span>
+              <span>{HOURS_SUMMARY}</span>
             </div>
 
             <div className="hero-buttons">
@@ -141,7 +141,7 @@ export default function HomePage() {
         <div className="footer-inner site-container">
           <div className="footer-brand">Sedap Eatery</div>Shop #4, 10–26 Vale Ave, Valley View, SA
           <div className="footer-hours" style={{ marginTop: 6, fontWeight: 600, color: "#FFD042" }}>
-            {OPEN_DAYS_LABEL} · {CLOSED_DAYS_LABEL}
+            {HOURS_SUMMARY}
           </div>
           <div className="footer-info">
   Powered by{" "}
