@@ -516,6 +516,15 @@ export default function MenuPage() {
     return acc;
   }, {});
 
+  // Within a category, an item that REQUIRES a Banana Leaf Set ("Add On (Extra)")
+  // must render AFTER the Set itself — the Set's hint tells the customer to pick
+  // a protein "below", and you can't add the protein before the Set anyway.
+  // Array.sort is stable and the comparator is 0 for every other item, so all
+  // other categories keep their existing order.
+  for (const list of Object.values(categories)) {
+    list.sort((a, b) => Number(REQUIRES_BANANA_LEAF(a)) - Number(REQUIRES_BANANA_LEAF(b)));
+  }
+
   const orderedKeys = [
     ...CATEGORY_ORDER.filter((k) => categories[k]),
     ...Object.keys(categories).filter((k) => !CATEGORY_ORDER.includes(k)),
