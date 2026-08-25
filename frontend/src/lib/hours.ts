@@ -74,10 +74,11 @@ export function currentMenuMode(d: Date = new Date()): MenuMode | null {
   return currentSession(d)?.menu ?? null;
 }
 
-// An item is part of the Banana Leaf offering (the set + its protein add-on).
+// An item is part of the Banana Leaf offering: the Set, or its protein add-on
+// named "Add On (Extra)". NOT the general dish add-ons like "Chicken (Add-on)".
 export function isBananaLeafItem(title?: string): boolean {
   const t = (title ?? "").toLowerCase();
-  return t.includes("banana leaf") || t.includes("add on") || t.includes("add-on");
+  return t.includes("banana leaf") || t.includes("add on (extra)");
 }
 
 // Human-readable trading hours shown across the site.
