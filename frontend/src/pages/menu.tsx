@@ -155,12 +155,12 @@ function isInternalItem(name: string): boolean {
 ========================= */
 const PLACEHOLDER_IMG = "/images/items/placeholder.png";
 
-// Descriptions for the generic dish add-ons (items named exactly Chicken/Seafood/Veggies).
-const ADDON_DESCRIPTIONS: Record<string, string> = {
-  chicken: "add extra to your dish",
-  seafood: "add extra to your dish",
-  veggies: "add extra to your dish",
-};
+// Generic dish add-ons (titled "… (Add-on)") all get this description,
+// overriding any curated one from menuConfig.
+function addonDescription(title?: string): string | null {
+  const t = (title ?? "").toLowerCase();
+  return t.includes("(add-on)") || t.includes("(add on)") ? "add extra to your dish" : null;
+}
 
 const MENU_CACHE_KEY = "sedap_menu_cache";
 
@@ -373,14 +373,10 @@ const CATEGORY_ORDER = [
   "New Items", // auto-populated from new Odoo products
 ];
 
-// These items require a Banana Leaf Set to be in the cart first
-const REQUIRES_BANANA_LEAF = (item: any): boolean => {
-  const title = (item.title ?? "").toLowerCase();
-  const id    = (item.id    ?? "").toLowerCase();
-  return title.includes("add on") || title.includes("add-on") ||
-         id.includes("add-on")    || id.includes("addon") ||
-         title.includes("extra");
-};
+// Only the Banana Leaf protein add-on ("Add On (Extra)") needs a Banana Leaf Set
+// in the cart first — NOT the general dish add-ons (Chicken/Seafood/Veggies).
+const REQUIRES_BANANA_LEAF = (item: any): boolean =>
+  (item.title ?? "").toLowerCase().includes("add on (extra)");
 
 // Check if any banana leaf base is in the cart
 const hasBananaLeafInCart = (cartItems: any[]): boolean =>
@@ -615,10 +611,7 @@ export default function MenuPage() {
                 item.options?.spice ||
                 item.options?.rice;
 
-              const desc =
-                item.description ||
-                ADDON_DESCRIPTIONS[(item.title ?? "").trim().toLowerCase()] ||
-                "";
+              const desc = addonDescription(item.title) || item.description || "";
 
               const qty = getQty(item.id);
 
