@@ -376,6 +376,12 @@ const CATEGORY_ORDER = [
   "New Items", // auto-populated from new Odoo products
 ];
 
+// Drinks are sold alongside the Banana Leaf Set during Saturday lunch, so these
+// categories stay visible in "banana" mode as well as the full menu.
+const DRINK_CATEGORIES = new Set(["Signature Malaysian Drinks", "Soft Drinks"]);
+const isDrinkItem = (item: MenuItem): boolean =>
+  DRINK_CATEGORIES.has(item.category ?? "");
+
 // Only the Banana Leaf protein add-on ("Add On (Extra)") needs a Banana Leaf Set
 // in the cart first — NOT the general dish add-ons (Chicken/Seafood/Veggies).
 const REQUIRES_BANANA_LEAF = (item: any): boolean =>
@@ -501,12 +507,13 @@ export default function MenuPage() {
       });
   }, []);
 
-  // Show items for the current session: "banana" → only Banana Leaf items;
-  // otherwise (full session OR closed-browse) → everything EXCEPT Banana Leaf.
+  // Show items for the current session: "banana" → Banana Leaf items PLUS drinks
+  // (Sat lunch sells drinks alongside the set); otherwise (full session OR
+  // closed-browse) → everything EXCEPT Banana Leaf.
   const showMode: "full" | "banana" = menuMode === "banana" ? "banana" : "full";
   const visibleItems = menuItems.filter((it) => {
     const banana = isBananaLeafItem(it.title);
-    return showMode === "banana" ? banana : !banana;
+    return showMode === "banana" ? banana || isDrinkItem(it) : !banana;
   });
 
   const categories = visibleItems.reduce<Record<string, MenuItem[]>>((acc, it) => {
@@ -571,7 +578,7 @@ export default function MenuPage() {
             display: "flex", alignItems: "center", gap: 10, fontSize: 14, fontWeight: 600,
           }}>
             <span>🍃</span>
-            <span>Saturday Lunch — Banana Leaf Set only (11am–2:30pm). The full menu returns for Saturday dinner.</span>
+            <span>Saturday Lunch — Banana Leaf Set + drinks only (11am–2:30pm). The full menu returns for Saturday dinner.</span>
           </div>
         ) : !posOpen ? (
           <div style={{
