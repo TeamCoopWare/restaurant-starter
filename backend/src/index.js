@@ -26,6 +26,7 @@ const {
   FRONTEND_URL = "http://localhost:3000",
   PORT = 4000,
   API_KEY,
+  ADMIN_KEY,
   ALLOWED_ORIGINS,
   TIMEZONE = "Australia/Adelaide",
 } = process.env;
@@ -77,6 +78,47 @@ function saveHolidayState(active) {
   }
 }
 let holidaySurchargeActive = loadHolidayState();
+
+/* =====================================================
+   HIDDEN MENU ITEMS — the owner's "sold out" switch, set from the website's
+   /admin page. A set of Odoo product_ids that must not appear on the menu and
+   must not be orderable. Persisted to disk (same reasoning as the holiday
+   flag: a restart must not silently put a sold-out dish back on sale).
+   Deliberately kept OUT of Odoo so the owner never has to touch the POS admin.
+===================================================== */
+const HIDDEN_STATE_FILE = path.join(__dirname, "..", "hidden-items.json");
+
+function loadHiddenItems() {
+  try {
+    const raw = JSON.parse(fs.readFileSync(HIDDEN_STATE_FILE, "utf8"));
+    return new Set((raw.hidden || []).map(Number).filter(Number.isInteger));
+  } catch {
+    return new Set();
+  }
+}
+function saveHiddenItems(set) {
+  try {
+    fs.writeFileSync(
+      HIDDEN_STATE_FILE,
+      JSON.stringify({ hidden: [...set].sort((a, b) => a - b) }, null, 2)
+    );
+  } catch (e) {
+    console.error("⚠️  Could not persist hidden items:", e.message);
+  }
+}
+let hiddenItems = loadHiddenItems();
+
+/* Strip hidden variants from an Odoo /api/menu payload. A group whose every
+   variant is hidden disappears entirely. Returns a new array — never mutates
+   the upstream response. */
+function stripHiddenFromMenu(groups) {
+  const out = [];
+  for (const g of groups || []) {
+    const variants = (g.variants || []).filter((v) => !hiddenItems.has(Number(v.product_id)));
+    if (variants.length) out.push({ ...g, variants });
+  }
+  return out;
+}
 
 if (!STRIPE_SECRET_KEY) {
   console.warn("⚠️  STRIPE_SECRET_KEY not set — checkout will fail");
@@ -139,6 +181,23 @@ function requireApiKey(req, res, next) {
   const provided = req.get("X-Api-Key");
   if (!provided || provided !== API_KEY) {
     return res.status(401).json({ error: "Unauthorized" });
+  }
+  next();
+}
+
+/* Separate secret for the website's /admin page. Deliberately NOT API_KEY:
+   that one is the POS bridge's secret and must never be typed into a browser
+   or stored in localStorage. If ADMIN_KEY is unset the admin endpoints are
+   closed rather than open. */
+function requireAdminKey(req, res, next) {
+  if (!ADMIN_KEY) {
+    return res
+      .status(503)
+      .json({ error: "Admin not configured (ADMIN_KEY missing on the server)" });
+  }
+  const provided = req.get("X-Admin-Key");
+  if (!provided || provided !== ADMIN_KEY) {
+    return res.status(401).json({ error: "Wrong admin password" });
   }
   next();
 }
@@ -319,6 +378,12 @@ async function priceOrderFromOdoo(uid, items, { applyHoliday = false } = {}) {
     if (!p.active || !p.available_in_pos) {
       throw new Error(`Product ${item.product_id} (${p.name}) is not available for sale`);
     }
+    /* Switched off by the owner in /admin. Checked here as well as in
+       /api/menu because the frontend keeps a localStorage menu cache
+       ("sedap_menu_cache") — a stale cache must never stay orderable. */
+    if (hiddenItems.has(item.product_id)) {
+      throw new Error(`Sorry, ${p.name} is sold out — please remove it from your cart`);
+    }
 
     const unitPrice = p.lst_price;            // authoritative POS price (variant extras included)
     const baseTaxes = p.taxes_id || [];
@@ -391,7 +456,9 @@ app.get("/api/menu", async (req, res) => {
     const r = await fetch(`${ODOO_URL}/api/menu`, { headers: odooHeaders });
     if (!r.ok) throw new Error(`Odoo returned ${r.status}`);
     const data = await r.json();
-    res.json(data);
+    // Hide anything the owner switched off in /admin. Done here (not just in
+    // the browser) so a customer genuinely cannot see a sold-out item.
+    res.json(stripHiddenFromMenu(data));
   } catch (err) {
     console.error("❌ Menu proxy error:", err.message);
     res.status(502).json({ error: "Odoo menu unavailable" });
@@ -458,6 +525,50 @@ app.get("/api/pos-status", async (req, res) => {
   } catch (err) {
     res.json({ open: false });
   }
+});
+
+/* =====================================================
+   ADMIN: SHOW / HIDE MENU ITEMS   (website /admin page)
+   Both routes need header X-Admin-Key. The owner never touches Odoo or the POS.
+===================================================== */
+
+// GET /api/admin/menu — the FULL menu (hidden items included) plus the hidden
+// id list, so the admin page can list everything and switch things back on.
+app.get("/api/admin/menu", requireAdminKey, async (req, res) => {
+  try {
+    const r = await fetch(`${ODOO_URL}/api/menu`, { headers: odooHeaders });
+    if (!r.ok) throw new Error(`Odoo returned ${r.status}`);
+    res.json({ groups: await r.json(), hidden: [...hiddenItems] });
+  } catch (err) {
+    console.error("❌ Admin menu error:", err.message);
+    res.status(502).json({ error: "Menu unavailable" });
+  }
+});
+
+// POST /api/admin/hidden — flip one item, or replace the whole list.
+//   { product_id: 42, hidden: true }   → hide (or show) a single item
+//   { hidden: [42, 43] }               → replace the entire list
+app.post("/api/admin/hidden", requireAdminKey, (req, res) => {
+  const { product_id, hidden } = req.body || {};
+
+  if (Array.isArray(hidden)) {
+    hiddenItems = new Set(hidden.map(Number).filter(Number.isInteger));
+  } else if (product_id != null) {
+    const id = Number(product_id);
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: "product_id must be a positive integer" });
+    }
+    // Explicit boolean wins; otherwise just toggle the current state.
+    const shouldHide = typeof hidden === "boolean" ? hidden : !hiddenItems.has(id);
+    if (shouldHide) hiddenItems.add(id);
+    else hiddenItems.delete(id);
+  } else {
+    return res.status(400).json({ error: "Send { product_id, hidden } or { hidden: [ids] }" });
+  }
+
+  saveHiddenItems(hiddenItems);
+  console.log("👁️  Hidden items:", hiddenItems.size, "→", [...hiddenItems].join(", ") || "(none)");
+  res.json({ hidden: [...hiddenItems] });
 });
 
 /* =====================================================
