@@ -293,6 +293,31 @@ async function resolveStripeOnlinePmId() {
      { orderLines, amountTotal, amountTax, pricedItems, breakdown }
    breakdown = { subtotal, gst, holiday_surcharge, total, holiday_applied }
 ===================================================== */
+/* Product fields needed to re-price an order.
+   `sedap_online_available` comes from our own module (sedap_order_system). If
+   that module has not been upgraded yet, Odoo errors on the unknown field — so
+   the first failure disables it for the process lifetime and we fall back to the
+   base field list. That keeps orders working no matter which side is deployed
+   first; the guard simply re-arms on the next backend restart. */
+const PRICING_FIELDS = ["id", "name", "lst_price", "taxes_id", "active", "available_in_pos"];
+let onlineFlagSupported = true;
+
+async function readProductsForPricing(uid, ids) {
+  if (onlineFlagSupported) {
+    try {
+      return await odooCall(uid, "product.product", "read",
+        [ids], { fields: [...PRICING_FIELDS, "sedap_online_available"] });
+    } catch (err) {
+      onlineFlagSupported = false;
+      console.warn(
+        "⚠️  Odoo field `sedap_online_available` unavailable — the online-availability " +
+        "guard is OFF until sedap_order_system is upgraded. Reason:", err.message
+      );
+    }
+  }
+  return await odooCall(uid, "product.product", "read", [ids], { fields: PRICING_FIELDS });
+}
+
 async function priceOrderFromOdoo(uid, items, { applyHoliday = false } = {}) {
   const clean = (items || [])
     .map((i) => ({ product_id: Number(i.product_id), qty: Number(i.qty) }))
@@ -301,10 +326,7 @@ async function priceOrderFromOdoo(uid, items, { applyHoliday = false } = {}) {
   if (!clean.length) throw new Error("Cart is empty or has no valid items");
 
   const ids = [...new Set(clean.map((i) => i.product_id))];
-  const products = await odooCall(uid, "product.product", "read",
-    [ids],
-    { fields: ["id", "name", "lst_price", "taxes_id", "active", "available_in_pos"] }
-  );
+  const products = await readProductsForPricing(uid, ids);
   const byId = new Map(products.map((p) => [p.id, p]));
 
   const orderLines = [];
@@ -318,6 +340,13 @@ async function priceOrderFromOdoo(uid, items, { applyHoliday = false } = {}) {
     if (!p) throw new Error(`Product ${item.product_id} not found in Odoo`);
     if (!p.active || !p.available_in_pos) {
       throw new Error(`Product ${item.product_id} (${p.name}) is not available for sale`);
+    }
+    /* The owner's website-only switch (Odoo: Point of Sale → Online Menu).
+       Enforced here as well as in /api/menu because the frontend caches the
+       menu in localStorage — a stale cache must not be orderable.
+       `=== false` (not falsy) so an Odoo without the field yet still passes. */
+    if (p.sedap_online_available === false) {
+      throw new Error(`Product ${item.product_id} (${p.name}) is currently unavailable online`);
     }
 
     const unitPrice = p.lst_price;            // authoritative POS price (variant extras included)

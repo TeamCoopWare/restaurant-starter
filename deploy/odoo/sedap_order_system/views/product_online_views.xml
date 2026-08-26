@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Checkbox on the product form, right beside "Available in POS". -->
+    <record id="product_template_form_sedap_online" model="ir.ui.view">
+        <field name="name">product.template.form.sedap.online</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="point_of_sale.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <field name="available_in_pos" position="after">
+                <field name="sedap_online_available" widget="boolean_toggle"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Owner-facing screen: one row per POS product, one click to hide/show
+         it on the website. Editable inline so no need to open each product. -->
+    <record id="view_sedap_online_menu_list" model="ir.ui.view">
+        <field name="name">sedap.online.menu.list</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <list string="Online Menu" editable="bottom" create="false" delete="false">
+                <field name="name" readonly="1"/>
+                <field name="categ_id" readonly="1" optional="show"/>
+                <field name="list_price" readonly="1"/>
+                <field name="sedap_online_available" widget="boolean_toggle"
+                       string="Show on website"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sedap_online_menu_search" model="ir.ui.view">
+        <field name="name">sedap.online.menu.search</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <search string="Online Menu">
+                <field name="name"/>
+                <field name="categ_id"/>
+                <filter name="shown_online" string="Shown online"
+                        domain="[('sedap_online_available', '=', True)]"/>
+                <filter name="hidden_online" string="Hidden online"
+                        domain="[('sedap_online_available', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_categ" string="Product Category"
+                            context="{'group_by': 'categ_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sedap_online_menu" model="ir.actions.act_window">
+        <field name="name">Online Menu</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list</field>
+        <field name="domain">[('available_in_pos', '=', True)]</field>
+        <field name="context">{'search_default_shown_online': 0}</field>
+        <field name="search_view_id" ref="view_sedap_online_menu_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No POS products yet.
+            </p>
+            <p>
+                Toggle "Show on website" to hide a product from
+                sedapeatery.com.au. It stays sellable at the in-store till.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_sedap_online_menu"
+              name="Online Menu"
+              parent="point_of_sale.menu_point_root"
+              action="action_sedap_online_menu"
+              sequence="90"/>
+
+</odoo>
