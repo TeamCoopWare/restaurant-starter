@@ -91,17 +91,43 @@ export function generateSlots(now, timeZone, {
   return { slots, interval };
 }
 
-// Trading sessions per weekday (0=Sun … 6=Sat), minutes from midnight (restaurant TZ).
-// Keep in sync with frontend/src/lib/hours.ts SCHEDULE.
+/* Trading sessions per weekday (0=Sun … 6=Sat), minutes from midnight (restaurant TZ).
+   `menu` mirrors the frontend's MenuMode and is what decides which items may be
+   ordered. Keep in sync with frontend/src/lib/hours.ts SCHEDULE. */
 export const SESSIONS = {
-  0: [{ start: 12 * 60, end: 19 * 60 + 30 }],                                   // Sun 12:00–19:30
+  0: [{ start: 12 * 60, end: 19 * 60 + 30, menu: "full" }],                      // Sun 12:00–19:30
   1: [],                                                                         // Mon closed
   2: [],                                                                         // Tue closed
-  3: [{ start: 17 * 60, end: 21 * 60 + 30 }],                                   // Wed 17:00–21:30
-  4: [{ start: 17 * 60, end: 21 * 60 + 30 }],                                   // Thu
-  5: [{ start: 17 * 60, end: 21 * 60 + 30 }],                                   // Fri
-  6: [{ start: 11 * 60, end: 14 * 60 + 30 }, { start: 17 * 60, end: 21 * 60 + 30 }], // Sat lunch + dinner
+  3: [                                                                           // Wed
+    { start: 12 * 60, end: 15 * 60,      menu: "lunch" },                        //   12:00–15:00
+    { start: 17 * 60, end: 21 * 60 + 30, menu: "full"  },                        //   17:00–21:30
+  ],
+  4: [                                                                           // Thu
+    { start: 12 * 60, end: 15 * 60,      menu: "lunch" },
+    { start: 17 * 60, end: 21 * 60 + 30, menu: "full"  },
+  ],
+  5: [                                                                           // Fri
+    { start: 12 * 60, end: 15 * 60,      menu: "lunch" },
+    { start: 17 * 60, end: 21 * 60 + 30, menu: "full"  },
+  ],
+  6: [                                                                           // Sat
+    { start: 11 * 60, end: 14 * 60 + 30, menu: "banana" },                       //   Banana Leaf lunch
+    { start: 17 * 60, end: 21 * 60 + 30, menu: "full"   },                       //   dinner
+  ],
 };
+
+/* The session we're inside right now, or null when closed / between sessions. */
+export function currentSession(now, timeZone) {
+  const p = zonedParts(now, timeZone);
+  const minsNow = p.hour * 60 + p.minute;
+  const dow = new Date(Date.UTC(p.year, p.month - 1, p.day)).getUTCDay();
+  return (SESSIONS[dow] || []).find((s) => minsNow >= s.start && minsNow < s.end) || null;
+}
+
+/* "full" | "banana" | "lunch", or null when closed. */
+export function currentSessionMenu(now, timeZone) {
+  return currentSession(now, timeZone)?.menu ?? null;
+}
 
 // Near-term pickup slots WITHIN the current trading session only. Returns no
 // slots when closed or between sessions (no pre-open ordering). allDay=true

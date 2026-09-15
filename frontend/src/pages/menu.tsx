@@ -6,7 +6,7 @@ import BananaLeafModal from "../components/BananaLeafModal";
 import VariantModal from "../components/VariantModal";
 import { useCart } from "../lib/cartContext";
 import { API_URL, productImageUrl } from "../lib/api";
-import { currentMenuMode, isBananaLeafItem, HOURS_SUMMARY, type MenuMode } from "../lib/hours";
+import { currentMenuMode, isBananaLeafItem, isLunchExcluded, HOURS_SUMMARY, type MenuMode } from "../lib/hours";
 import staticMenuData from "../../config/menuConfig.json";
 import styles from "../styles/menu.module.css";
 
@@ -194,6 +194,9 @@ function buildFullMenu(odooData: any[], staticItems: MenuItem[]): MenuItem[] {
   const priceMap = new Map<number, number>();
   const liveIds = new Set<number>();
   const templateByProductId = new Map<number, number | null>();
+  // Odoo product-template name, keyed by every variant id under it — lets a
+  // rename in Odoo drive the title of a curated menuConfig item.
+  const nameByProductId = new Map<number, string>();
   // Odoo product image URL needs the product.template id — but only use it when
   // Odoo actually HAS an image for that template (`has_image`). Otherwise Odoo's
   // /web/image returns its default grey silhouette (HTTP 200), which would mask
@@ -208,6 +211,7 @@ function buildFullMenu(odooData: any[], staticItems: MenuItem[]): MenuItem[] {
       priceMap.set(v.product_id, v.price);
       liveIds.add(v.product_id);
       templateByProductId.set(v.product_id, templateIdOf(p));
+      if (p.name) nameByProductId.set(v.product_id, String(p.name).trim());
     }
   }
 
@@ -217,6 +221,15 @@ function buildFullMenu(odooData: any[], staticItems: MenuItem[]): MenuItem[] {
     if (item.odooProductId && priceMap.has(item.odooProductId)) {
       updated.price = priceMap.get(item.odooProductId);
     }
+    /* Title follows Odoo too, so renaming a product there (e.g. "… (4 pcs)" →
+       "… (3 pcs)") reaches the website with no rebuild — same as price.
+       menuConfig.json keeps ownership of description, category and curated
+       image. NOTE: a variant item whose own odooProductId isn't live keeps its
+       menuConfig title, since there's no single Odoo name to take. */
+    const odooName = item.odooProductId
+      ? nameByProductId.get(item.odooProductId)
+      : undefined;
+    if (odooName) updated.title = odooName;
     // Representative Odoo id for this item (own id, else first variant id).
     const repId =
       item.odooProductId ??
@@ -404,7 +417,8 @@ export default function MenuPage() {
   const [posOpen,      setPosOpen]      = useState<boolean>(true);
   const [holidayActive, setHolidayActive] = useState<boolean>(false);
   // Current trading session's menu mode: "full" (whole menu, no Banana Leaf),
-  // "banana" (Banana Leaf only — Sat lunch), or null (closed). Computed
+  // "banana" (Banana Leaf only — Sat lunch), "lunch" (Wed–Fri 12–3pm: full menu
+  // minus desserts / Cucuk Udang / Starter Sampler), or null (closed). Computed
   // client-side after mount (restaurant TZ) to avoid a hydration mismatch, and
   // refreshed each minute so it flips at session boundaries without a reload.
   const [menuMode, setMenuMode] = useState<MenuMode | null>(null);
@@ -507,13 +521,17 @@ export default function MenuPage() {
       });
   }, []);
 
-  // Show items for the current session: "banana" → Banana Leaf items PLUS drinks
-  // (Sat lunch sells drinks alongside the set); otherwise (full session OR
-  // closed-browse) → everything EXCEPT Banana Leaf.
-  const showMode: "full" | "banana" = menuMode === "banana" ? "banana" : "full";
+  // Show items for the current session:
+  //   "banana" → Banana Leaf items PLUS drinks (Sat lunch sells drinks with the set)
+  //   "lunch"  → everything except Banana Leaf, minus the weekday-lunch exclusions
+  //   "full" / closed-browse → everything EXCEPT Banana Leaf
+  const showMode: MenuMode = menuMode ?? "full";
   const visibleItems = menuItems.filter((it) => {
     const banana = isBananaLeafItem(it.title);
-    return showMode === "banana" ? banana || isDrinkItem(it) : !banana;
+    if (showMode === "banana") return banana || isDrinkItem(it);
+    if (banana) return false;
+    if (showMode === "lunch" && isLunchExcluded(it)) return false;
+    return true;
   });
 
   const categories = visibleItems.reduce<Record<string, MenuItem[]>>((acc, it) => {
@@ -579,6 +597,15 @@ export default function MenuPage() {
           }}>
             <span>🍃</span>
             <span>Saturday Lunch — Banana Leaf Set + drinks only (11am–2:30pm). The full menu returns for Saturday dinner.</span>
+          </div>
+        ) : menuMode === "lunch" ? (
+          <div style={{
+            background: "rgba(240,165,0,0.15)", border: "2px solid #f0a500",
+            color: "#fff", borderRadius: 10, padding: "12px 18px", marginBottom: 18,
+            display: "flex", alignItems: "center", gap: 10, fontSize: 14, fontWeight: 600,
+          }}>
+            <span>🍛</span>
+            <span>Weekday Lunch (12–3pm)</span>
           </div>
         ) : !posOpen ? (
           <div style={{
