@@ -194,6 +194,9 @@ function buildFullMenu(odooData: any[], staticItems: MenuItem[]): MenuItem[] {
   const priceMap = new Map<number, number>();
   const liveIds = new Set<number>();
   const templateByProductId = new Map<number, number | null>();
+  // Odoo product-template name, keyed by every variant id under it — lets a
+  // rename in Odoo drive the title of a curated menuConfig item.
+  const nameByProductId = new Map<number, string>();
   // Odoo product image URL needs the product.template id — but only use it when
   // Odoo actually HAS an image for that template (`has_image`). Otherwise Odoo's
   // /web/image returns its default grey silhouette (HTTP 200), which would mask
@@ -208,6 +211,7 @@ function buildFullMenu(odooData: any[], staticItems: MenuItem[]): MenuItem[] {
       priceMap.set(v.product_id, v.price);
       liveIds.add(v.product_id);
       templateByProductId.set(v.product_id, templateIdOf(p));
+      if (p.name) nameByProductId.set(v.product_id, String(p.name).trim());
     }
   }
 
@@ -217,6 +221,15 @@ function buildFullMenu(odooData: any[], staticItems: MenuItem[]): MenuItem[] {
     if (item.odooProductId && priceMap.has(item.odooProductId)) {
       updated.price = priceMap.get(item.odooProductId);
     }
+    /* Title follows Odoo too, so renaming a product there (e.g. "… (4 pcs)" →
+       "… (3 pcs)") reaches the website with no rebuild — same as price.
+       menuConfig.json keeps ownership of description, category and curated
+       image. NOTE: a variant item whose own odooProductId isn't live keeps its
+       menuConfig title, since there's no single Odoo name to take. */
+    const odooName = item.odooProductId
+      ? nameByProductId.get(item.odooProductId)
+      : undefined;
+    if (odooName) updated.title = odooName;
     // Representative Odoo id for this item (own id, else first variant id).
     const repId =
       item.odooProductId ??
