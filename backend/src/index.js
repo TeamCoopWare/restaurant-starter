@@ -6,7 +6,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { randomUUID } from "crypto";
-import { generateSlots, generateSessionSlots } from "./slots.js";
+import { generateSlots, generateSessionSlots, currentSessionMenu } from "./slots.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -107,6 +107,34 @@ function saveHiddenItems(set) {
   }
 }
 let hiddenItems = loadHiddenItems();
+
+/* Items not sold during the weekday lunch session (Wed–Fri 12–3pm): all
+   desserts, Cucuk Udang and the Starter Sampler.
+
+   Two independent rules, because either one alone has a gap:
+     - ids   catch the items we know today, even if someone renames them in Odoo
+     - names catch items that have NO id here yet — a product that was archived
+             and recreated with a fresh id, or a dessert added after this deploy
+   Keep in sync with LUNCH_EXCLUDED_* in frontend/src/lib/hours.ts. */
+const LUNCH_BLOCKED_PRODUCT_IDS = new Set([
+  9,   // Cucuk Udang
+  38,  // Ice Kacang   (Dessert)
+  39,  // Buko Pandan  (Dessert)
+]);
+
+/* Matched case-insensitively against the Odoo product name. The dessert words
+   mirror the Dessert entries in ODOO_CATEGORY_MAP (frontend/src/pages/menu.tsx),
+   so a new dessert is refused here for the same reason it is hidden there. */
+const LUNCH_BLOCKED_NAME_KEYWORDS = [
+  "cucuk udang", "starter sampler",
+  "ice kacang", "buko pandan", "cendol", "ice cream", "pudding", "kuih", "dessert",
+];
+
+function isLunchBlocked(productId, name) {
+  if (LUNCH_BLOCKED_PRODUCT_IDS.has(productId)) return true;
+  const n = String(name || "").toLowerCase();
+  return LUNCH_BLOCKED_NAME_KEYWORDS.some((k) => n.includes(k));
+}
 
 /* Strip hidden variants from an Odoo /api/menu payload. A group whose every
    variant is hidden disappears entirely. Returns a new array — never mutates
@@ -366,6 +394,13 @@ async function priceOrderFromOdoo(uid, items, { applyHoliday = false } = {}) {
   );
   const byId = new Map(products.map((p) => [p.id, p]));
 
+  /* Weekday-lunch exclusions. Checked server-side for the same reason as
+     hiddenItems: the browser keeps a localStorage menu cache and honours a
+     `?force=` override, so neither may decide what is actually orderable.
+     Pickup slots are only ever offered inside the CURRENT session
+     (generateSessionSlots), so "now" and the pickup time share a session. */
+  const lunchNow = currentSessionMenu(new Date(), TIMEZONE) === "lunch";
+
   const orderLines = [];
   const pricedItems = [];
   let amountTotal = 0;
@@ -383,6 +418,11 @@ async function priceOrderFromOdoo(uid, items, { applyHoliday = false } = {}) {
        ("sedap_menu_cache") — a stale cache must never stay orderable. */
     if (hiddenItems.has(item.product_id)) {
       throw new Error(`Sorry, ${p.name} is sold out — please remove it from your cart`);
+    }
+    if (lunchNow && isLunchBlocked(item.product_id, p.name)) {
+      throw new Error(
+        `Sorry, ${p.name} isn't available during weekday lunch (12–3pm) — please remove it from your cart`
+      );
     }
 
     const unitPrice = p.lst_price;            // authoritative POS price (variant extras included)

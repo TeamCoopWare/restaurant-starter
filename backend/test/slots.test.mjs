@@ -3,7 +3,7 @@
    Fakes a fixed UTC "now" and asserts the slots are Adelaide-local, regardless
    of the machine's own time zone. */
 import assert from "node:assert/strict";
-import { generateSlots, zonedTimeToUtc } from "../src/slots.js";
+import { generateSlots, generateSessionSlots, currentSessionMenu, zonedTimeToUtc } from "../src/slots.js";
 
 let failures = 0;
 function check(name, fn) {
@@ -71,6 +71,45 @@ check("near-term mode: near close returns only the remaining slots (no tomorrow)
 check("zonedTimeToUtc round-trips a winter Adelaide wall time", () => {
   const utc = new Date(zonedTimeToUtc(2026, 7, 25, 12, 0, TZ));
   assert.equal(utc.toISOString(), "2026-07-25T02:30:00.000Z");
+});
+
+/* ---------- Weekday lunch session (Wed-Fri 12:00-15:00) ----------
+   July = UTC+9:30 (no DST). 2026-07-22 is a Wednesday. */
+
+check("Wed 1:00 PM Adelaide is the lunch session", () => {
+  const now = new Date("2026-07-22T03:30:00Z"); // Wed 13:00 Adelaide
+  assert.equal(currentSessionMenu(now, TZ), "lunch");
+});
+
+check("Wed lunch offers slots from 1:20 PM and stops before the 3:00 PM close", () => {
+  const now = new Date("2026-07-22T03:30:00Z"); // Wed 13:00 Adelaide
+  const { slots } = generateSessionSlots(now, TZ);
+  assert.ok(slots.length > 0, "expected lunch slots");
+  assert.equal(slots[0].localTime, "13:20");
+  assert.equal(slots.at(-1).localTime, "14:40", "last slot must fit before 15:00");
+  assert.ok(slots.every((s) => s.day === "Today"), "session slots are same-day only");
+});
+
+check("Wed 3:30 PM (between lunch and dinner) is closed - no slots", () => {
+  const now = new Date("2026-07-22T06:00:00Z"); // Wed 15:30 Adelaide
+  assert.equal(currentSessionMenu(now, TZ), null);
+  assert.equal(generateSessionSlots(now, TZ).slots.length, 0);
+});
+
+check("Wed 6:00 PM is still the full dinner session", () => {
+  const now = new Date("2026-07-22T08:30:00Z"); // Wed 18:00 Adelaide
+  assert.equal(currentSessionMenu(now, TZ), "full");
+  assert.ok(generateSessionSlots(now, TZ).slots.length > 0);
+});
+
+check("Sat lunch is unchanged - still the Banana Leaf session", () => {
+  const now = new Date("2026-07-25T02:30:00Z"); // Sat 12:00 Adelaide
+  assert.equal(currentSessionMenu(now, TZ), "banana");
+});
+
+check("Mon stays closed all day", () => {
+  const now = new Date("2026-07-20T03:30:00Z"); // Mon 13:00 Adelaide
+  assert.equal(currentSessionMenu(now, TZ), null);
 });
 
 console.log(failures ? `\n${failures} test(s) FAILED` : "\nAll slot tests passed");

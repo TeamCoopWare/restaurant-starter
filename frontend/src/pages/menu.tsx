@@ -6,7 +6,7 @@ import BananaLeafModal from "../components/BananaLeafModal";
 import VariantModal from "../components/VariantModal";
 import { useCart } from "../lib/cartContext";
 import { API_URL, productImageUrl } from "../lib/api";
-import { currentMenuMode, isBananaLeafItem, HOURS_SUMMARY, type MenuMode } from "../lib/hours";
+import { currentMenuMode, isBananaLeafItem, isLunchExcluded, HOURS_SUMMARY, type MenuMode } from "../lib/hours";
 import staticMenuData from "../../config/menuConfig.json";
 import styles from "../styles/menu.module.css";
 
@@ -417,7 +417,8 @@ export default function MenuPage() {
   const [posOpen,      setPosOpen]      = useState<boolean>(true);
   const [holidayActive, setHolidayActive] = useState<boolean>(false);
   // Current trading session's menu mode: "full" (whole menu, no Banana Leaf),
-  // "banana" (Banana Leaf only — Sat lunch), or null (closed). Computed
+  // "banana" (Banana Leaf only — Sat lunch), "lunch" (Wed–Fri 12–3pm: full menu
+  // minus desserts / Cucuk Udang / Starter Sampler), or null (closed). Computed
   // client-side after mount (restaurant TZ) to avoid a hydration mismatch, and
   // refreshed each minute so it flips at session boundaries without a reload.
   const [menuMode, setMenuMode] = useState<MenuMode | null>(null);
@@ -520,13 +521,17 @@ export default function MenuPage() {
       });
   }, []);
 
-  // Show items for the current session: "banana" → Banana Leaf items PLUS drinks
-  // (Sat lunch sells drinks alongside the set); otherwise (full session OR
-  // closed-browse) → everything EXCEPT Banana Leaf.
-  const showMode: "full" | "banana" = menuMode === "banana" ? "banana" : "full";
+  // Show items for the current session:
+  //   "banana" → Banana Leaf items PLUS drinks (Sat lunch sells drinks with the set)
+  //   "lunch"  → everything except Banana Leaf, minus the weekday-lunch exclusions
+  //   "full" / closed-browse → everything EXCEPT Banana Leaf
+  const showMode: MenuMode = menuMode ?? "full";
   const visibleItems = menuItems.filter((it) => {
     const banana = isBananaLeafItem(it.title);
-    return showMode === "banana" ? banana || isDrinkItem(it) : !banana;
+    if (showMode === "banana") return banana || isDrinkItem(it);
+    if (banana) return false;
+    if (showMode === "lunch" && isLunchExcluded(it)) return false;
+    return true;
   });
 
   const categories = visibleItems.reduce<Record<string, MenuItem[]>>((acc, it) => {
@@ -592,6 +597,15 @@ export default function MenuPage() {
           }}>
             <span>🍃</span>
             <span>Saturday Lunch — Banana Leaf Set + drinks only (11am–2:30pm). The full menu returns for Saturday dinner.</span>
+          </div>
+        ) : menuMode === "lunch" ? (
+          <div style={{
+            background: "rgba(240,165,0,0.15)", border: "2px solid #f0a500",
+            color: "#fff", borderRadius: 10, padding: "12px 18px", marginBottom: 18,
+            display: "flex", alignItems: "center", gap: 10, fontSize: 14, fontWeight: 600,
+          }}>
+            <span>🍛</span>
+            <span>Weekday Lunch (12–3pm)</span>
           </div>
         ) : !posOpen ? (
           <div style={{
