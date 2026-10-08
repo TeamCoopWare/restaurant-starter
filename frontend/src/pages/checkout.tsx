@@ -48,7 +48,7 @@ export default function CheckoutPage() {
   /* ── Fetch the server price breakdown (reflects the live holiday flag) ── */
   useEffect(() => {
     const quoteItems = items
-      .map((i: any) => ({ product_id: i.odooProductId, qty: i.qty }))
+      .map((i: any) => ({ product_id: i.odooProductId, qty: i.qty, extras: i.extras ?? [] }))
       .filter((i: any) => i.product_id);
     if (!quoteItems.length) { setQuote(null); return; }
 
@@ -100,7 +100,8 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
-      // Send only product_id + qty — the backend re-prices from Odoo.
+      // Send product_id + qty + the chosen options — the backend re-prices
+      // from Odoo, including each option's price_extra.
       // No API key: this endpoint is public (prices are server-enforced).
       const res = await fetch(`${API_URL}/create-checkout-session`, {
         method: "POST",
@@ -109,7 +110,7 @@ export default function CheckoutPage() {
           customer:    { name, phone },
           pickup_time: pickupSlot!.value,   // Odoo UTC datetime string
           items: items
-            .map((i: any) => ({ product_id: i.odooProductId, qty: i.qty }))
+            .map((i: any) => ({ product_id: i.odooProductId, qty: i.qty, extras: i.extras ?? [] }))
             .filter((i: any) => i.product_id),
         }),
       });

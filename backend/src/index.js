@@ -365,6 +365,74 @@ async function resolveStripeOnlinePmId() {
   return methods[0].id;
 }
 
+/* Website option labels -> the attribute VALUE names Odoo actually uses.
+   The site's labels were written for customers ("Add Fried Egg"), Odoo's are
+   the kitchen's ("Fried Egg"). Matching is case-insensitive, so only genuinely
+   different wording needs an entry here -- "Jasmine Rice" already matches
+   "JASMINE RICE", and "Extra Sambal Sauce" matches "Extra sambal sauce". */
+const EXTRA_LABEL_ALIASES = {
+  "add fried egg":   "Fried Egg",
+  "no fried egg":    "No Egg",
+  "extra spicy":     "Extra",
+  "no extra sambal": "None",
+};
+
+/* The no_variant attribute values (Spice Level, Top Up, Choice, Sauce) offered
+   by a set of product templates, keyed by template id.
+
+   These carry a price_extra that is NOT part of product.lst_price -- which is
+   exactly why add-ons were being charged at the base price. Variant-creating
+   attributes (Meat, Add-ons) are deliberately excluded: each of those is
+   already its own product.product with its own lst_price. */
+async function noVariantValuesByTemplate(uid, tmplIds) {
+  const byTmpl = new Map();
+  if (!tmplIds.length) return byTmpl;
+  const rows = await odooCall(uid, "product.template.attribute.value", "search_read",
+    [[
+      ["product_tmpl_id", "in", tmplIds],
+      ["ptav_active", "=", true],
+      ["attribute_id.create_variant", "=", "no_variant"],
+    ]],
+    { fields: ["id", "name", "price_extra", "attribute_id", "product_tmpl_id"] }
+  );
+  for (const r of rows) {
+    const t = Array.isArray(r.product_tmpl_id) ? r.product_tmpl_id[0] : r.product_tmpl_id;
+    if (!byTmpl.has(t)) byTmpl.set(t, []);
+    byTmpl.get(t).push(r);
+  }
+  return byTmpl;
+}
+
+/* Resolve one line's chosen options against what that product actually offers.
+
+   `labels` is what the website sent; `ptavIds` is the already-resolved form the
+   webhook uses -- the ids travel through Stripe metadata, so the order recorded
+   after payment is priced from the same options the customer was charged for.
+
+   An option the product does not offer is reported in `unmatched` and costs
+   nothing: a price is never invented, and every price comes from Odoo. */
+function resolveExtras(available, { labels = [], ptavIds = [] } = {}) {
+  const ids = [], matched = [], unmatched = [];
+  let priceExtra = 0;
+  const take = (v) => {
+    if (ids.includes(v.id)) return;
+    ids.push(v.id);
+    priceExtra += Number(v.price_extra) || 0;
+    matched.push(v.name);
+  };
+  for (const raw of ptavIds) {
+    const v = available.find((a) => a.id === Number(raw));
+    if (v) take(v); else unmatched.push("ptav:" + raw);
+  }
+  for (const raw of labels) {
+    const label = String(raw).trim();
+    const want = (EXTRA_LABEL_ALIASES[label.toLowerCase()] ?? label).toLowerCase();
+    const v = available.find((a) => String(a.name).trim().toLowerCase() === want);
+    if (v) take(v); else unmatched.push(label);
+  }
+  return { ids, priceExtra: Math.round(priceExtra * 100) / 100, matched, unmatched };
+}
+
 /* =====================================================
    SERVER-SIDE PRICING (source of truth = Odoo)
    Re-reads lst_price + taxes_id for each product_id and uses Odoo's own
@@ -382,7 +450,14 @@ async function resolveStripeOnlinePmId() {
 ===================================================== */
 async function priceOrderFromOdoo(uid, items, { applyHoliday = false } = {}) {
   const clean = (items || [])
-    .map((i) => ({ product_id: Number(i.product_id), qty: Number(i.qty) }))
+    .map((i) => ({
+      product_id: Number(i.product_id),
+      qty:        Number(i.qty),
+      // Chosen no_variant options: labels from the website, or ids on the
+      // webhook path. Prices are always read from Odoo, never from the client.
+      extras:   Array.isArray(i.extras)   ? i.extras.filter((x) => typeof x === "string") : [],
+      ptav_ids: Array.isArray(i.ptav_ids) ? i.ptav_ids.map(Number).filter(Number.isInteger) : [],
+    }))
     .filter((i) => Number.isInteger(i.product_id) && i.product_id > 0 && i.qty > 0);
 
   if (!clean.length) throw new Error("Cart is empty or has no valid items");
@@ -390,9 +465,22 @@ async function priceOrderFromOdoo(uid, items, { applyHoliday = false } = {}) {
   const ids = [...new Set(clean.map((i) => i.product_id))];
   const products = await odooCall(uid, "product.product", "read",
     [ids],
-    { fields: ["id", "name", "lst_price", "taxes_id", "active", "available_in_pos"] }
+    { fields: ["id", "name", "lst_price", "taxes_id", "active", "available_in_pos",
+               "product_tmpl_id"] }
   );
   const byId = new Map(products.map((p) => [p.id, p]));
+
+  const tmplOf = (p) =>
+    Array.isArray(p?.product_tmpl_id) ? p.product_tmpl_id[0] : p?.product_tmpl_id;
+
+  /* Only fetched when something actually chose an option, so a cart without
+     add-ons makes exactly the same Odoo calls it always did. */
+  const tmplIds = [...new Set(
+    clean.filter((i) => i.extras.length || i.ptav_ids.length)
+         .map((i) => tmplOf(byId.get(i.product_id)))
+         .filter(Boolean)
+  )];
+  const valuesByTmpl = await noVariantValuesByTemplate(uid, tmplIds);
 
   /* Weekday-lunch exclusions. Checked server-side for the same reason as
      hiddenItems: the browser keeps a localStorage menu cache and honours a
@@ -425,7 +513,19 @@ async function priceOrderFromOdoo(uid, items, { applyHoliday = false } = {}) {
       );
     }
 
-    const unitPrice = p.lst_price;            // authoritative POS price (variant extras included)
+    /* Odoo's own price for the chosen options. lst_price already covers the
+       variant-creating attributes (Meat, Add-ons); this adds the no_variant
+       ones (Fried Egg, Coconut Rice, Extra Sambal) that it does not. */
+    const chosen = resolveExtras(valuesByTmpl.get(tmplOf(p)) || [],
+      { labels: item.extras, ptavIds: item.ptav_ids });
+    if (chosen.unmatched.length) {
+      console.warn(
+        `⚠️  ${p.name} (${item.product_id}): option(s) this product does not offer ` +
+        `in Odoo, so NOT charged: ${chosen.unmatched.join(", ")}`
+      );
+    }
+
+    const unitPrice = Math.round((p.lst_price + chosen.priceExtra) * 100) / 100;
     const baseTaxes = p.taxes_id || [];
     const taxIds = applyHoliday
       ? [...new Set([...baseTaxes, HOLIDAY_TAX_ID])]   // dedupe if already present
@@ -454,14 +554,21 @@ async function priceOrderFromOdoo(uid, items, { applyHoliday = false } = {}) {
       price_subtotal_incl: lineIncl,
       discount:            0,
       tax_ids:             [[6, 0, taxIds]],
+      /* What the customer picked, so the POS shows it and the kitchen ticket
+         prints it (sedap_online_notify reads attribute_value_ids). */
+      ...(chosen.ids.length && { attribute_value_ids: [[6, 0, chosen.ids]] }),
     }]);
 
     pricedItems.push({
       product_id: item.product_id,
-      name:       p.name,
+      name:       chosen.matched.length
+                    ? `${p.name} (${chosen.matched.join(", ")})`
+                    : p.name,
       qty:        item.qty,
       lineIncl,
       lineHoliday,                         // surcharge portion baked into lineIncl
+      ptav_ids:   chosen.ids,              // travels through Stripe metadata
+      extras:     chosen.matched,
     });
 
     amountTotal += lineIncl;
@@ -704,7 +811,9 @@ app.post("/create-checkout-session", checkoutLimiter, async (req, res) => {
     );
 
     /* ---- Compact cart for the webhook (Stripe metadata: keep it small) ---- */
-    const metaItems = JSON.stringify(pricedItems.map((i) => [i.product_id, i.qty]));
+    const metaItems = JSON.stringify(pricedItems.map((i) =>
+      i.ptav_ids.length ? [i.product_id, i.qty, i.ptav_ids] : [i.product_id, i.qty]
+    ));
     if (metaItems.length > 480) {
       throw new Error("Cart too large to process — please reduce the number of items");
     }
@@ -826,7 +935,8 @@ async function createPaidOrder(session) {
   const meta = session.metadata || {};
   let items;
   try {
-    items = JSON.parse(meta.items || "[]").map(([product_id, qty]) => ({ product_id, qty }));
+    items = JSON.parse(meta.items || "[]").map(([product_id, qty, ptav_ids]) =>
+      ({ product_id, qty, ptav_ids: Array.isArray(ptav_ids) ? ptav_ids : [] }));
   } catch {
     throw new Error("Invalid cart metadata on session");
   }

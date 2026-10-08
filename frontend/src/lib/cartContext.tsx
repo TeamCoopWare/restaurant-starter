@@ -24,6 +24,11 @@ export type CartItem = {
 
   // 🔑 HUMAN READABLE LINE (kitchen / POS)
   name?: string;
+
+  // 🔑 CHOSEN no_variant OPTIONS (spice level, top-up, rice, sauce)
+  // Labels as shown on the site. The backend maps them to Odoo attribute
+  // values and takes the price from Odoo — these are never priced here.
+  extras?: string[];
 };
 
 

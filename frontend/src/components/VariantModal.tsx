@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import { VIEW_ONLY_MENU } from "../../config/appConfig";
 import { useCart } from "../lib/cartContext";
 
-const RICE_OPTIONS = ["Jasmine Rice", "Coconut Rice"];
+/* Rice is Odoo's "Choice" attribute: JASMINE RICE is free, COCONUT RICE has
+   price_extra 2.00. The amount shown here must match Odoo, because Odoo is
+   what actually gets charged — the checkout total comes from /api/quote. */
+const RICE_OPTIONS = [
+  { title: "Jasmine Rice", price: 0 },
+  { title: "Coconut Rice", price: 2.0 },
+];
 
 export default function VariantModal({
   open,
@@ -46,8 +52,10 @@ export default function VariantModal({
 
   const eggObj    = hasEgg    ? item.options.egg.find((e: any) => e.id === eggOption)       : null;
   const sambalObj = hasSambal ? item.options.sambal.find((s: any) => s.id === sambalOption) : null;
+  const riceObj     = hasRice ? RICE_OPTIONS.find((r) => r.title === riceType) : null;
   const basePrice   = selectedVariant?.price ?? item.price ?? 0;
-  const finalPrice  = basePrice + (eggObj?.price ?? 0) + (sambalObj?.price ?? 0);
+  const finalPrice  = basePrice + (eggObj?.price ?? 0) + (sambalObj?.price ?? 0)
+                                + (riceObj?.price ?? 0);
 
   const handleAddToCart = () => {
     if (!canAdd) return;
@@ -59,6 +67,18 @@ export default function VariantModal({
       hasSpice    ? spiceLevel + " spice"            : null,
     ].filter(Boolean);
 
+    /* The options themselves, for Odoo. Unlike descParts (display text) these
+       are the plain option labels the backend maps to Odoo attribute values,
+       so the add-on is priced, recorded on the order and printed in the
+       kitchen. Spice level is included even though it is free — the kitchen
+       needs it. */
+    const extras = [
+      hasRice   ? riceType   : null,
+      hasEgg    ? eggObj?.title    : null,
+      hasSambal ? sambalObj?.title : null,
+      hasSpice  ? spiceLevel : null,
+    ].filter(Boolean) as string[];
+
     addItem({
       id:            item.id + "-" + (selectedVariantId ?? "base") + "-" + Date.now(),
       title:         item.title,
@@ -68,6 +88,7 @@ export default function VariantModal({
       name:          descParts.length > 0
                        ? item.title + " (" + descParts.join(" | ") + ")"
                        : item.title,
+      extras,
     });
     onClose();
   };
@@ -136,9 +157,10 @@ export default function VariantModal({
             <h4 className="bl-section-title">Rice Choice</h4>
             {RICE_OPTIONS.map((rice) => (
               <RadioRow
-                key={rice} id={rice} label={rice}
-                selected={riceType === rice}
-                onSelect={() => setRiceType(rice)}
+                key={rice.title} id={rice.title}
+                label={rice.title + (rice.price > 0 ? " (+$" + rice.price.toFixed(2) + ")" : "")}
+                selected={riceType === rice.title}
+                onSelect={() => setRiceType(rice.title)}
               />
             ))}
           </>

@@ -84,14 +84,14 @@
       "options": {
         "egg": [
           {
-            "id": "egg-yes",
-            "title": "Add Fried Egg",
-            "price": 2.0
-          },
-          {
             "id": "egg-no",
             "title": "No Fried Egg",
             "price": 0
+          },
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
           }
         ]
       }
@@ -116,7 +116,7 @@
     {
       "id": "chicken-curry-rice",
       "title": "Chicken Rendang with Plain Rice",
-      "odooProductId": 27,
+      "odooProductId": 101,
       "category": "Rice Meals",
       "price": 18.9,
       "description": "Aromatic Malaysian chicken rendang slow cooked with your choice of rice.",
@@ -140,11 +140,14 @@
     {
       "id": "prawn-sambal-rice",
       "title": "Prawn Sambal with Plain Rice",
-      "odooProductId": 0,
+      "odooProductId": 102,
       "category": "Rice Meals",
       "price": 20.9,
       "description": "Juicy prawns in rich spicy sambal served with plain rice.",
-      "image": "/images/items/prawnrice.jpg"
+      "image": "/images/items/prawnrice.jpg",
+      "options": {
+        "rice": true
+      }
     },
     {
       "id": "nasi-lemak-biasa",
@@ -157,14 +160,14 @@
       "options": {
         "egg": [
           {
-            "id": "egg-yes",
-            "title": "Add Fried Egg",
-            "price": 2.0
-          },
-          {
             "id": "egg-no",
             "title": "No Fried Egg",
             "price": 0
+          },
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
           }
         ],
         "sambal": [
@@ -192,14 +195,14 @@
       "options": {
         "egg": [
           {
-            "id": "egg-yes",
-            "title": "Add Fried Egg",
-            "price": 2.0
-          },
-          {
             "id": "egg-no",
             "title": "No Fried Egg",
             "price": 0
+          },
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
           }
         ],
         "sambal": [
@@ -227,14 +230,14 @@
       "options": {
         "egg": [
           {
-            "id": "egg-yes",
-            "title": "Add Fried Egg",
-            "price": 2.0
-          },
-          {
             "id": "egg-no",
             "title": "No Fried Egg",
             "price": 0
+          },
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
           }
         ],
         "sambal": [
@@ -262,14 +265,14 @@
       "options": {
         "egg": [
           {
-            "id": "egg-yes",
-            "title": "Add Fried Egg",
-            "price": 2.0
-          },
-          {
             "id": "egg-no",
             "title": "No Fried Egg",
             "price": 0
+          },
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
           }
         ]
       }
@@ -322,14 +325,14 @@
       "options": {
         "egg": [
           {
-            "id": "egg-yes",
-            "title": "Add Fried Egg",
-            "price": 2.0
-          },
-          {
             "id": "egg-no",
             "title": "No Fried Egg",
             "price": 0
+          },
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
           }
         ]
       }
@@ -429,14 +432,14 @@
       "options": {
         "egg": [
           {
-            "id": "egg-yes",
-            "title": "Add Fried Egg",
-            "price": 2.0
-          },
-          {
             "id": "egg-no",
             "title": "No Fried Egg",
             "price": 0
+          },
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
           }
         ],
         "spice": [
@@ -477,14 +480,14 @@
       "options": {
         "egg": [
           {
-            "id": "egg-yes",
-            "title": "Add Fried Egg",
-            "price": 2.0
-          },
-          {
             "id": "egg-no",
             "title": "No Fried Egg",
             "price": 0
+          },
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
           }
         ],
         "spice": [
@@ -531,14 +534,14 @@
       "options": {
         "egg": [
           {
-            "id": "egg-yes",
-            "title": "Add Fried Egg",
-            "price": 2.0
-          },
-          {
             "id": "egg-no",
             "title": "No Fried Egg",
             "price": 0
+          },
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
           }
         ],
         "spice": [
@@ -585,14 +588,14 @@
       "options": {
         "egg": [
           {
-            "id": "egg-yes",
-            "title": "Add Fried Egg",
-            "price": 2.0
-          },
-          {
             "id": "egg-no",
             "title": "No Fried Egg",
             "price": 0
+          },
+          {
+            "id": "egg-yes",
+            "title": "Add Fried Egg",
+            "price": 2.0
           }
         ]
       }
