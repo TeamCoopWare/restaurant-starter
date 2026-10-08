@@ -179,6 +179,7 @@
           {
             "id": "sambal-extra",
             "title": "Extra Sambal Sauce",
+            "odooProductId": 58,
             "price": 3.0
           }
         ]
@@ -214,6 +215,7 @@
           {
             "id": "sambal-extra",
             "title": "Extra Sambal Sauce",
+            "odooProductId": 58,
             "price": 3.0
           }
         ]
@@ -249,6 +251,7 @@
           {
             "id": "sambal-extra",
             "title": "Extra Sambal Sauce",
+            "odooProductId": 58,
             "price": 3.0
           }
         ]

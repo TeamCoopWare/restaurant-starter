@@ -54,8 +54,14 @@ export default function VariantModal({
   const sambalObj = hasSambal ? item.options.sambal.find((s: any) => s.id === sambalOption) : null;
   const riceObj     = hasRice ? RICE_OPTIONS.find((r) => r.title === riceType) : null;
   const basePrice   = selectedVariant?.price ?? item.price ?? 0;
-  const finalPrice  = basePrice + (eggObj?.price ?? 0) + (sambalObj?.price ?? 0)
-                                + (riceObj?.price ?? 0);
+
+  /* Extra Sambal Sauce is a real Odoo product (58), not an attribute of the
+     dish, so it goes in the cart as its own line at Odoo's price. That keeps
+     it sellable online without adding anything to the POS. Egg and rice ARE
+     attributes of the dish, so they stay part of its unit price. */
+  const sambalLine  = sambalObj?.odooProductId ? sambalObj : null;
+  const finalPrice  = basePrice + (eggObj?.price ?? 0) + (riceObj?.price ?? 0);
+  const cartTotal   = finalPrice + (sambalLine?.price ?? 0);
 
   const handleAddToCart = () => {
     if (!canAdd) return;
@@ -63,7 +69,6 @@ export default function VariantModal({
       hasVariants ? selectedVariant?.title           : null,
       hasRice     ? riceType                         : null,
       eggObj?.price > 0   ? eggObj.title             : null,
-      sambalObj?.price > 0 ? sambalObj.title         : null,
       hasSpice    ? spiceLevel + " spice"            : null,
     ].filter(Boolean);
 
@@ -75,7 +80,6 @@ export default function VariantModal({
     const extras = [
       hasRice   ? riceType   : null,
       hasEgg    ? eggObj?.title    : null,
-      hasSambal ? sambalObj?.title : null,
       hasSpice  ? spiceLevel : null,
     ].filter(Boolean) as string[];
 
@@ -90,6 +94,19 @@ export default function VariantModal({
                        : item.title,
       extras,
     });
+
+    /* Same cart id as the standalone "Sambal Sauce" menu item, so ticking it
+       here and adding it from the Add-ons section merge into one line. */
+    if (sambalLine) {
+      addItem({
+        id:            "addon-sambal",
+        title:         "Sambal Sauce",
+        qty:           1,
+        price:         sambalLine.price,
+        odooProductId: sambalLine.odooProductId,
+        name:          "Sambal Sauce",
+      });
+    }
     onClose();
   };
 
@@ -221,7 +238,7 @@ export default function VariantModal({
             >
               {!canAdd
                 ? "Select a protein to continue"
-                : "Add to Cart – $" + finalPrice.toFixed(2)}
+                : "Add to Cart – $" + cartTotal.toFixed(2)}
             </button>
           )}
         </div>

@@ -246,6 +246,20 @@ function buildFullMenu(odooData: any[], staticItems: MenuItem[]): MenuItem[] {
           : v
       );
     }
+    /* Option entries that are really a separate Odoo product (Extra Sambal
+       Sauce = product 58) follow Odoo's price too, the same way variants do.
+       Odoo stays the single source of truth for what the customer pays. */
+    const sambal = (item as any).options?.sambal;
+    if (Array.isArray(sambal)) {
+      (updated as any).options = {
+        ...(item as any).options,
+        sambal: sambal.map((o: any) =>
+          o.odooProductId && priceMap.has(o.odooProductId)
+            ? { ...o, price: priceMap.get(o.odooProductId)! }
+            : o
+        ),
+      };
+    }
     return updated;
   });
 
@@ -655,7 +669,8 @@ export default function MenuPage() {
                 (item.variants && item.variants.length > 0) ||
                 item.options?.egg ||
                 item.options?.spice ||
-                item.options?.rice;
+                item.options?.rice ||
+                item.options?.sambal;
 
               const desc = addonDescription(item.title) || item.description || "";
 
